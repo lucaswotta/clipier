@@ -97,6 +97,9 @@ pub struct Crew {
     pub updated_ms: u64,
     /// The commit the crew started from.
     pub base: String,
+    /// The branch the checkout was on, which a pull request goes into.
+    #[serde(default)]
+    pub base_branch: String,
     /// The branch everything merges into.
     pub integration: String,
     pub pieces: Vec<PieceState>,
@@ -313,6 +316,7 @@ impl Crew {
             started_ms: now_ms(),
             updated_ms: now_ms(),
             base: String::new(),
+            base_branch: String::new(),
             integration: format!("leme/{id}/integration"),
             pieces,
             finished: false,
@@ -621,7 +625,10 @@ pub fn carry_out(setup: &Setup<'_>, shared: &Arc<Mutex<Crew>>, commands: &Receiv
         Ok(tree) => tree,
         Err(error) => return finish_with_error(setup.layout, shared, error.to_string()),
     };
-    update(setup.layout, shared, |crew| crew.base.clone_from(&before.head));
+    update(setup.layout, shared, |crew| {
+        crew.base.clone_from(&before.head);
+        crew.base_branch.clone_from(&before.branch);
+    });
 
     let (sender, finished) = mpsc::channel::<Finished>();
     let mut state =
@@ -829,6 +836,7 @@ esac
         let tree = git(&fixture.repository, &["ls-tree", "--name-only", &crew.integration]);
         assert!(tree.contains("schema.txt") && tree.contains("command.txt"), "{tree}");
         assert_eq!(crew.checkout_untouched, Some(true));
+        assert_eq!(crew.base_branch, "main");
         Repo::open(&fixture.repository).unwrap().check_untouched(&before).unwrap();
         let usage = crate::usage::Log::new(&fixture.layout.usage_file()).totals();
         assert!(usage["claude"].uses >= 4, "the captain and every piece went through the usage log");

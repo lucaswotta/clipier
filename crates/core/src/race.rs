@@ -77,6 +77,9 @@ pub struct Race {
     pub updated_ms: u64,
     /// The commit every boat started from.
     pub base: String,
+    /// The branch the checkout was on, which a pull request goes into.
+    #[serde(default)]
+    pub base_branch: String,
     pub boats: Vec<Boat>,
     pub finished: bool,
     pub error: Option<String>,
@@ -139,6 +142,7 @@ impl Race {
             started_ms: now_ms(),
             updated_ms: now_ms(),
             base: String::new(),
+            base_branch: String::new(),
             boats,
             finished: false,
             error: None,
@@ -416,7 +420,10 @@ pub fn sail(sail: &Sail<'_>, shared: &Arc<Mutex<Race>>) {
             Ok(opened) => opened,
             Err(error) => return fail_all(sail.layout, shared, error.to_string()),
         };
-    update(sail.layout, shared, |race| race.base.clone_from(&before.head));
+    update(sail.layout, shared, |race| {
+        race.base.clone_from(&before.head);
+        race.base_branch.clone_from(&before.branch);
+    });
 
     // Worktrees are made one after another: git locks the repository while it adds one.
     let mut trees: Vec<(String, Agent, String, Worktree)> = Vec::new();
@@ -545,6 +552,7 @@ printf '%s\n' '{"type":"result","session_id":"s","is_error":false,"result":"Wrot
         let saved = load(&layout, "fair-kestrel-0001").unwrap();
         assert!(saved.finished && saved.error.is_none(), "{saved:?}");
         assert_eq!(saved.checkout_untouched, Some(true));
+        assert_eq!(saved.base_branch, "main", "a pull request goes into the branch the checkout was on");
         for boat in &saved.boats {
             assert_eq!(
                 (boat.phase, boat.summary.as_str(), boat.tokens),

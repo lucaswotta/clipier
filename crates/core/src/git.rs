@@ -167,6 +167,17 @@ impl Repo {
         git(&self.dir, &["branch", "-D", branch]).map(drop)
     }
 
+    /// The address of a remote, when the repository has it.
+    pub fn remote_url(&self, name: &str) -> Option<String> {
+        git(&self.dir, &["remote", "get-url", name]).ok().filter(|url| !url.is_empty())
+    }
+
+    /// Sends `branch` to the remote called `origin` and makes it track there. Git's own credentials
+    /// are used; it never stops to ask a question.
+    pub fn push(&self, branch: &str) -> Result<()> {
+        git(&self.dir, &["push", "--set-upstream", "origin", &format!("{branch}:{branch}")]).map(drop)
+    }
+
     /// What `branch` adds on top of `base`, cut to `limit` characters.
     pub fn diff(&self, base: &str, branch: &str, limit: usize) -> Result<String> {
         self.diff_of(&[base, branch], limit)
@@ -340,6 +351,22 @@ mod tests {
         // Git on Windows may turn line endings into CRLF, hence the trim.
         assert_eq!(std::fs::read_to_string(integration.dir.join("a.txt")).unwrap().trim(), "from first");
         assert_eq!(git(&integration.dir, &["status", "--porcelain"]).unwrap(), "", "the failed merge was undone");
+    }
+
+    #[test]
+    fn a_branch_is_pushed_to_origin_and_the_remote_is_named() {
+        let sandbox = Sandbox::new("push");
+        assert_eq!(sandbox.repo.remote_url("origin"), None);
+        assert!(sandbox.repo.push("main").is_err(), "there is no remote to push to");
+        let bare = sandbox.root.join("origin.git");
+        git(&sandbox.root, &["init", "-q", "--bare", "origin.git"]).unwrap();
+        git(&sandbox.repo.dir, &["remote", "add", "origin", &bare.to_string_lossy()]).unwrap();
+        let tree = sandbox.tree("boat", "main");
+        std::fs::write(tree.dir.join("b.txt"), "b").unwrap();
+        tree.commit("b").unwrap();
+        sandbox.repo.push(&tree.branch).unwrap();
+        assert!(git(&bare, &["branch", "--list", "leme/boat"]).unwrap().contains("leme/boat"));
+        assert_eq!(sandbox.repo.remote_url("origin").as_deref(), Some(bare.to_string_lossy().as_ref()));
     }
 
     #[test]
