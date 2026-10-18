@@ -11,9 +11,11 @@ mod codex;
 mod command;
 mod detect;
 mod opencode;
+mod turn;
 
 pub use command::{Environment, Mode, Prepared, Profile, Request, Session, Unavailable, build};
 pub use detect::{Allowance, Detected, Model, Window, detect_all, detect_in};
+pub use turn::{Turn, output_file, take_turn};
 
 use std::collections::HashMap;
 
