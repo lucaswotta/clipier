@@ -84,12 +84,14 @@
     const github = await window.__TAURI_INTERNALS__.invoke("github_status");
     check("the GitHub status answers", typeof github.connected === "boolean" && ["stored", "gh", "none"].includes(github.source), JSON.stringify(github));
 
-    // Palettes.
-    check("the interface uses the light palette", getComputedStyle(document.documentElement).colorScheme === "light");
+    // Palettes: the interface starts in the system's, and each toggle press flips it.
+    const systemDark = matchMedia("(prefers-color-scheme: dark)").matches;
+    const palette = () => document.documentElement.dataset.theme;
+    check("the interface starts in the system's palette", palette() === (systemDark ? "dark" : "light"), palette());
     document.getElementById("theme-toggle").click();
-    check("the night watch toggle switches to the dark palette", document.documentElement.dataset.theme === "dark");
+    check("the toggle switches to the other palette", palette() === (systemDark ? "light" : "dark"), palette());
     document.getElementById("theme-toggle").click();
-    check("the day watch toggle returns to the light palette", document.documentElement.dataset.theme === "light");
+    check("the toggle returns to the system's palette", palette() === (systemDark ? "dark" : "light"), palette());
     check("the mark is a button with a name", document.getElementById("mark").tagName === "BUTTON" && !!document.getElementById("mark").getAttribute("aria-label"));
 
     if (window.__SELFTEST_SAIL__) {
