@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/logo.svg" width="72" alt="Leme Pier"></p>
+
 # Leme Pier
 
 **Every agent, one dock.**
