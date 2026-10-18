@@ -195,7 +195,7 @@ mod tests {
     use super::*;
 
     fn memory(name: &str) -> Memory {
-        let root = std::env::temp_dir().join(format!("windmark-memory-{name}-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("leme-pier-memory-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&root);
         Memory::open(&root, Path::new("/some/project"))
     }
@@ -284,7 +284,7 @@ mod tests {
 
     #[test]
     fn each_repository_has_its_own_memory() {
-        let root = std::env::temp_dir().join(format!("windmark-memory-two-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("leme-pier-memory-two-{}", std::process::id()));
         let _ = fs::remove_dir_all(&root);
         Memory::open(&root, Path::new("/a/project")).propose(&[note("T", "t")], "r");
         assert_eq!(Memory::open(&root, Path::new("/b/project")).notes(), Vec::new());

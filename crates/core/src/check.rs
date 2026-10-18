@@ -458,8 +458,8 @@ mod tests {
     #[test]
     fn credentials_in_the_environment_never_reach_a_check() {
         // SAFETY: no other test of this module reads or writes this variable.
-        unsafe { std::env::set_var("WINDMARK_TEST_API_KEY", "secret-value") };
-        let result = quick(&argv(&["sh", "-c", "echo [$WINDMARK_TEST_API_KEY]"]), &temp("env"));
+        unsafe { std::env::set_var("LEME_PIER_TEST_API_KEY", "secret-value") };
+        let result = quick(&argv(&["sh", "-c", "echo [$LEME_PIER_TEST_API_KEY]"]), &temp("env"));
         assert_eq!(result.output, "[]");
     }
 

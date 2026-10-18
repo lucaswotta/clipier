@@ -325,7 +325,7 @@ mod tests {
     use super::*;
 
     fn temp(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("windmark-session-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("leme-pier-session-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir
@@ -395,7 +395,7 @@ mod tests {
             &dir,
             r#"prompt=""; while [ $# -gt 0 ]; do [ "$1" = "-p" ] && prompt="$2"; shift; done
 printf '%s\n' '{"type":"system","subtype":"init","session_id":"sess-1"}'
-case "$prompt" in *"Context from Windmark"*) seen=briefed;; *) seen=bare;; esac
+case "$prompt" in *"Context from Leme Pier"*) seen=briefed;; *) seen=bare;; esac
 printf '%s\n' "{\"type\":\"result\",\"session_id\":\"sess-1\",\"is_error\":false,\"result\":\"$seen\\nNOTE: Where | The code is in src.\",\"usage\":{\"input_tokens\":3,\"output_tokens\":4}}""#,
         );
         let store = Store::new(&Layout::new(&dir));
