@@ -9,9 +9,11 @@ mod agy;
 mod claude;
 mod codex;
 mod command;
+mod detect;
 mod opencode;
 
 pub use command::{Environment, Mode, Prepared, Profile, Request, Session, Unavailable, build};
+pub use detect::{Allowance, Detected, Model, Window, detect_all, detect_in};
 
 use std::collections::HashMap;
 

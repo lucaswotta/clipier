@@ -1,8 +1,10 @@
 //! Starts a process, copies what it prints to a file as it arrives, and stops it when it takes too
 //! long, goes silent or is cancelled. The file means a killed run still leaves what it printed.
 
+mod capture;
 mod failure;
 
+pub use capture::{Captured, capture};
 pub use failure::{Failure, classify};
 
 use std::fs::File;
