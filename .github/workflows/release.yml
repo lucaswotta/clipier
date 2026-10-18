@@ -46,6 +46,8 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The public Client ID of the Leme Pier OAuth App (not a secret): enables the GitHub sign-in by code.
+          LEME_PIER_GITHUB_CLIENT_ID: Ov23liNBtqQAjGeTAwhF
         with:
           projectPath: app
           tagName: ${{ github.ref_name }}
