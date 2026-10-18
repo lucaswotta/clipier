@@ -63,6 +63,16 @@ impl Totals {
     }
 }
 
+/// One agent's totals, in numbers the screen can show.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct Summary {
+    pub agent: String,
+    pub uses: u64,
+    pub delivered: u64,
+    pub tokens: u64,
+    pub average_ms: Option<u64>,
+}
+
 pub struct Log {
     file: PathBuf,
 }
@@ -98,6 +108,23 @@ impl Log {
             entry.duration += Duration::from_millis(usage.duration_ms);
         }
         totals
+    }
+
+    /// The totals as a list for the screen, the busiest agent first.
+    pub fn summary(&self) -> Vec<Summary> {
+        let mut list: Vec<Summary> = self
+            .totals()
+            .into_iter()
+            .map(|(agent, totals)| Summary {
+                average_ms: totals.average_duration().map(|d| u64::try_from(d.as_millis()).unwrap_or(u64::MAX)),
+                agent,
+                uses: totals.uses,
+                delivered: totals.delivered,
+                tokens: totals.tokens,
+            })
+            .collect();
+        list.sort_by_key(|entry| std::cmp::Reverse(entry.uses));
+        list
     }
 }
 

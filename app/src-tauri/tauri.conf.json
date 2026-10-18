@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Leme Pier",
+  "version": "0.0.1",
+  "identifier": "io.github.lucaswotta.leme-pier",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{ "title": "Leme Pier", "width": 1400, "height": 880 }],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'; form-action 'none'",
+      "devCsp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost ws://localhost:1420; object-src 'none'; base-uri 'none'; form-action 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["deb"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/64x64.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "Every agent, one dock",
+    "longDescription": "Leme Pier finds the AI coding CLIs installed on your machine (Claude Code, Codex, Antigravity, OpenCode) and lets you use them from one place: a conversation you can continue with another agent, one brief sent to several agents at once, and a plan carried out by a crew of them in parallel. Your checkout is never touched by a race or a crew.",
+    "linux": { "deb": { "depends": ["git", "bubblewrap"] } },
+    "publisher": "Lucas Motta Ribeiro",
+    "homepage": "https://github.com/lucaswotta/leme-pier"
+  }
+}

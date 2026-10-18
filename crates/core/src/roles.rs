@@ -6,22 +6,25 @@ use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
 
+use serde::Serialize;
+
 use crate::agents::{Agent, Detected, Mode};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Fallback {
     pub agent: String,
     pub model: String,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Source {
     Builtin,
     User,
     Project,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Role {
     pub name: String,
     /// The name shown aboard; the interface may translate the built-in ones.

@@ -7,6 +7,7 @@ use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
 
+use serde::Serialize;
 use serde_json::Value;
 
 use super::Agent;
@@ -15,7 +16,7 @@ use crate::runner::{Captured, capture};
 
 const ASK_LIMIT: Duration = Duration::from_secs(20);
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Model {
     pub id: String,
     pub name: String,
@@ -30,19 +31,19 @@ impl Model {
 }
 
 /// How much of an allowance is used and when it starts over, as the CLI words it.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Window {
     pub percent: u8,
     pub resets: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize)]
 pub struct Allowance {
     pub session: Option<Window>,
     pub week: Option<Window>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Detected {
     pub agent: Agent,
     pub installed: bool,

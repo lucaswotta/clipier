@@ -7,13 +7,17 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
+# The window's interface is built by Vite; the Rust crate only needs the folder to exist.
+mkdir -p app/dist
+[ -f app/dist/index.html ] || echo '<!doctype html><title>Leme Pier</title>' > app/dist/index.html
+
 mode="${1:-full}"
 cargo fmt --all --check
 cargo clippy --workspace --all-targets -- -D warnings
-# Windows code is only compiled on Windows, so lint it here too when its target is installed
-# (`rustup target add x86_64-pc-windows-gnu`).
+# Windows code is only compiled on Windows, so lint the core for it here when its target is installed
+# (`rustup target add x86_64-pc-windows-gnu`). The window's crate needs a Windows toolchain: only CI builds it.
 if rustup target list --installed 2>/dev/null | grep -q '^x86_64-pc-windows-gnu$'; then
-  cargo clippy --workspace --all-targets --target x86_64-pc-windows-gnu -- -D warnings
+  cargo clippy -p leme-core --all-targets --target x86_64-pc-windows-gnu -- -D warnings
 fi
 
 case "$mode" in

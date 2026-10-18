@@ -3,6 +3,8 @@
 //! checked against each CLI's `--help` and a real run.
 
 use std::fmt;
+
+use serde::Serialize;
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -11,7 +13,8 @@ use crate::id;
 use crate::platform::{self, sandbox};
 use crate::runner::{NESTING_GUARD, Spawn, secret_names};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Mode {
     /// Reads the repository and reports; never changes it.
     Read,
