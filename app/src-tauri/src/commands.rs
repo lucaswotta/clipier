@@ -2,6 +2,7 @@
 
 pub mod chat;
 pub mod crew;
+pub mod github;
 pub mod race;
 pub mod roles;
 

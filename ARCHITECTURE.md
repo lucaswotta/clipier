@@ -38,7 +38,7 @@ engine, no autonomous background runs. It is a tool you sit in front of.
 4. **The agents do the thinking.** Leme chooses nothing for the model: no hidden prompts that change
    behavior, no retries that spend tokens silently. It routes, isolates, records and briefs.
 5. **Local only.** Everything is a file on your disk. Nothing leaves the machine except what the
-   agent CLIs themselves send.
+   agent CLIs themselves send, and one branch plus a pull request to GitHub when the user clicks for it.
 6. **Open from the first commit.** Apache-2.0. History is written to be read.
 
 ## Vocabulary
@@ -72,7 +72,7 @@ leme-pier/
         session/             conversations and the briefing
         crew/                the plan carried out; piece/ is one piece's work
         race.rs  plan.rs  roles.rs  config.rs
-        git.rs  check.rs  scope.rs  memory.rs  usage.rs  store.rs  id.rs
+        git.rs  github.rs  check.rs  scope.rs  memory.rs  usage.rs  store.rs  id.rs
   app/
     src-tauri/               Tauri shell: commands only, no logic; the window self-test
     src/                     interface: vanilla JS modules, one catalog per language, one stylesheet

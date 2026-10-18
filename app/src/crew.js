@@ -4,6 +4,7 @@ import { formatDuration } from "./format.js";
 import { escapeHtml, rich } from "./text.js";
 import { words } from "./vocabulary.js";
 import { markdown } from "./chat.js";
+import { pullRequestSlot, mountPullRequests } from "./github.js";
 
 const POLL_MS = 800;
 
@@ -242,6 +243,7 @@ function finishedHtml(view) {
     ${merged ? `<p class="summary-text">${c.cargo} <code>${branch}</code>. ${c.untouched}</p>
       <div class="cmd"><code>git -C ${repository} diff ${escapeHtml(state.base.slice(0, 10))} ${branch}</code></div>
       <div class="cmd"><code>git -C ${repository} merge ${branch}</code><button type="button" class="btn ghost" data-copy="git -C ${repository} merge ${branch}">${words.course.copy}</button></div>
+      ${state.base_branch ? pullRequestSlot("crew") : ""}
       <details class="changes"><summary>${words.course.seeChanges}</summary>${crew.diff ? diffHtml(crew.diff) : `<pre class="diff-view">${words.course.loading}</pre>`}</details>` : `<p class="summary-text">${c.nothing}</p>`}
     <div class="form-foot"><button class="btn primary" id="again" type="button">${icons.plus(16)}${c.again}</button></div></section>`;
 }
@@ -278,6 +280,19 @@ function paint() {
   for (const details of hosts.content.querySelectorAll("details")) if (details.className && open.has(details.className)) details.open = true;
   hosts.content.scrollTop = scroll;
   bind();
+  const state = crew.view?.crew;
+  if (state?.finished && state.base_branch) {
+    const merged = state.pieces.filter((p) => p.phase === "merged").map((p) => `- ${p.piece.title}`);
+    mountPullRequests(hosts.content, {
+      crew: {
+        repository: state.repository,
+        branch: state.integration,
+        base: state.base_branch,
+        title: state.brief.replace(/\s+/g, " ").slice(0, 72),
+        body: [state.plan_summary, merged.length ? merged.join("\n") : ""].filter(Boolean).join("\n\n"),
+      },
+    });
+  }
   const diff = hosts.content.querySelector(".changes");
   if (diff) {
     diff.addEventListener("toggle", async () => {

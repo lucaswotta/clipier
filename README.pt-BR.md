@@ -49,8 +49,8 @@ Se você paga por mais de um agente de código, conhece o custo de trocar: o pr�
 |  |  |
 |---|---|
 | **Conversa** | Uma conversa que você pode continuar com outro agente ou modelo. Cada resposta diz qual agente e modelo a escreveu. Quando o agente muda, o próximo recebe um briefing curto montado *sem chamar modelo*: o que ele não viu, o estado do repositório e as notas do projeto. O agente que falou por último retoma a própria sessão, sem briefing. |
-| **Regata** | Um pedido enviado a até quatro pares de agente e modelo ao mesmo tempo, cada um na sua git worktree. A verificação do projeto (os testes dele) roda em cada resultado, e o trabalho espera numa branch por barco: você lê o que cada um fez e fica com um. |
-| **Tripulação** | Um papel de capitão divide o pedido em partes. Você lê o plano, e então as partes rodam lado a lado onde não dependem uma da outra. Cada uma é verificada, pode ser revisada e é reunida numa branch de integração. Ele só pergunta a você quando uma parte falha, não se junta limpa ou é devolvida duas vezes. |
+| **Regata** | Um pedido enviado a até quatro pares de agente e modelo ao mesmo tempo, cada um na sua git worktree. A verificação do projeto (os testes dele) roda em cada resultado, e o trabalho espera numa branch por barco: você lê o que cada um fez e fica com um, reunindo você mesmo ou com um botão que abre um pull request. |
+| **Tripulação** | Um papel de capitão divide o pedido em partes. Você lê o plano, e então as partes rodam lado a lado onde não dependem uma da outra. Cada uma é verificada, pode ser revisada e é reunida numa branch de integração. Ele só pergunta a você quando uma parte falha, não se junta limpa ou é devolvida duas vezes. Ao terminar, um clique abre um pull request a partir da branch de integração. |
 | **Notas** | Fatos sobre o seu projeto que os agentes deixam para o próximo (um comando, uma convenção), guardados como arquivos markdown que você pode ler e apagar. |
 | **Agentes** | O que cada CLI diz de si: versão, login, modelos, quanto da cota do Claude foi usada, o que passou pelo Leme e quem faz cada papel. |
 
@@ -136,7 +136,7 @@ parallel = 3              # partes que podem rodar ao mesmo tempo
 
 Uma Regata ou uma Tripulação nunca toca no seu checkout, na sua branch nem no seu índice: os agentes trabalham em git worktrees, e o resultado é verificado no fim. A verificação roda sem segredos e, onde há sandbox, sem rede. Agentes que rodam comandos sem perguntar só rodam dentro de um sandbox. Notas que parecem credenciais são recusadas. O [SECURITY.md](SECURITY.md) diz o que é e o que não é garantido: uma Conversa, por exemplo, edita a pasta que você apontou, como o CLI faria num terminal.
 
-Sem contas, sem telemetria, sem requisição de rede própria, sem chaves de API de modelo, sem plugins, sem execuções em segundo plano. É uma ferramenta diante da qual você se senta.
+Sem contas, sem telemetria, sem chaves de API de modelo, sem plugins, sem execuções em segundo plano. A única requisição de rede que o Leme Pier faz por conta própria é ao GitHub, e só quando você clica em *Abrir um pull request* ([como ele entra](docs/GITHUB.md)). É uma ferramenta diante da qual você se senta.
 
 ## Status
 

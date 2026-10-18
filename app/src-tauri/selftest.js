@@ -80,6 +80,10 @@
     document.getElementById("course-form").requestSubmit();
     check("sailing without a project says what is missing", !!(await waitFor(() => document.getElementById("course-error")?.textContent.trim())));
 
+    // GitHub: only the status, which asks nothing of the network.
+    const github = await window.__TAURI_INTERNALS__.invoke("github_status");
+    check("the GitHub status answers", typeof github.connected === "boolean" && ["stored", "gh", "none"].includes(github.source), JSON.stringify(github));
+
     // Palettes.
     check("the interface uses the light palette", getComputedStyle(document.documentElement).colorScheme === "light");
     document.getElementById("theme-toggle").click();

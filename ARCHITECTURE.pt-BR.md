@@ -25,7 +25,7 @@ Sem serviço hospedado, sem contas, sem telemetria, sem chaves de API de modelo,
 2. **Explicável.** Cada modo precisa ser explicável a uma criança de doze anos em duas frases. Se não der, o modo é redesenhado, não documentado.
 3. **Uma Regata ou uma Tripulação nunca toca no seu checkout.** Os agentes delas trabalham em git worktrees e o que produzem fica em branches até você decidir. O Chat é a exceção, como num terminal: o agente edita a pasta que você apontou, e a tela mostra o estado do repositório para você ver o que mudou.
 4. **Quem pensa são os agentes.** O Leme não escolhe nada pelo modelo: sem prompts escondidos que mudem o comportamento, sem novas tentativas que gastem token em silêncio. Ele encaminha, isola, registra e informa.
-5. **Só local.** Tudo é um arquivo no seu disco. Nada sai da máquina além do que os próprios CLIs dos agentes enviam.
+5. **Só local.** Tudo é um arquivo no seu disco. Nada sai da máquina além do que os próprios CLIs dos agentes enviam, e uma branch com um pull request para o GitHub quando o usuário clica para isso.
 6. **Aberto desde o primeiro commit.** Apache-2.0. O histórico é escrito para ser lido.
 
 ## Vocabulário
@@ -59,7 +59,7 @@ leme-pier/
         session/             conversas e o briefing
         crew/                o plano executado; piece.rs é o trabalho de uma parte
         race.rs  plan.rs  roles.rs  config.rs
-        git.rs  check.rs  scope.rs  memory.rs  usage.rs  store.rs  id.rs
+        git.rs  github.rs  check.rs  scope.rs  memory.rs  usage.rs  store.rs  id.rs
   app/
     src-tauri/               casca Tauri: só comandos, sem lógica; o self-test da janela
     src/                     interface: módulos JS puros, um catálogo por idioma, uma folha de estilo

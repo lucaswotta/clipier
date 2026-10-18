@@ -18,6 +18,10 @@ It guarantees:
   there is none.
 - A guard variable stops an agent from starting runs of its own.
 - Notes written to the project's memory that look like credentials are refused.
+- The only network request Leme makes itself is to GitHub, when you click *Open a pull request*. It sends one
+  branch whose name starts with `leme/` and the title and description you see. The sign-in token is kept
+  in `~/.config/leme-pier/github-token`, readable only by you, and can be deleted from the interface.
+  See [docs/GITHUB.md](docs/GITHUB.md).
 
 It does not guarantee:
 

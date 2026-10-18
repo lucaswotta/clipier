@@ -4,6 +4,7 @@ import { escapeHtml } from "./text.js";
 import { words } from "./vocabulary.js";
 import { markdown } from "./chat.js";
 import { fleet, loadFleet, modelControl, agentOptions } from "./fleet.js";
+import { pullRequestSlot, mountPullRequests } from "./github.js";
 import { crewActive, crewRun, crewReset, crewOpen, crewPlan, crewPaint, whenCrewChanges } from "./crew.js";
 
 const REPOSITORY_KEY = "leme-pier.repository";
@@ -309,6 +310,7 @@ function boatCardHtml(boat, race, live) {
         <div class="cmd"><code>git -C ${escapeHtml(race.repository)} diff ${escapeHtml(race.base.slice(0, 10))} ${escapeHtml(boat.branch)}</code></div>
         <div class="cmd"><code>git -C ${escapeHtml(race.repository)} merge ${escapeHtml(boat.branch)}</code><button type="button" class="btn ghost" data-copy="git -C ${escapeHtml(race.repository)} merge ${escapeHtml(boat.branch)}">${c.copy}</button></div>
       </details>
+      ${race.base_branch ? pullRequestSlot(`boat:${boat.id}`) : ""}
       <details class="changes" data-boat="${escapeHtml(boat.id)}"><summary>${c.seeChanges}</summary><pre class="diff-view">${run.diffs[boat.id] ? escapeHtml(run.diffs[boat.id]) : c.loading}</pre></details>`
     : "";
   return `<article class="boat ${boat.phase}"><header><span class="who">${escapeHtml(boat.agent)} · ${escapeHtml(boat.model || words.chat.defaultModel)}</span><span class="phase ${boat.phase}">${phase}</span></header>
@@ -338,6 +340,18 @@ function paintRun() {
     <details class="the-brief"><summary>${c.theBrief}</summary><div class="bubble">${markdown(race.brief)}</div></details>
     <div class="boats">${race.boats.map((boat) => boatCardHtml(boat, race, live.get(boat.id))).join("")}</div>
     <p class="hint">${c.safe}</p></div>`;
+  const requests = {};
+  for (const boat of race.boats) {
+    if (!boat.branch || !race.base_branch) continue;
+    requests[`boat:${boat.id}`] = {
+      repository: race.repository,
+      branch: boat.branch,
+      base: race.base_branch,
+      title: race.brief.replace(/\s+/g, " ").slice(0, 72),
+      body: [boat.summary, boat.files.length ? `Files: ${boat.files.join(", ")}` : "", boat.check?.headline ?? ""].filter(Boolean).join("\n\n"),
+    };
+  }
+  mountPullRequests(hosts.content, requests);
   for (const details of hosts.content.querySelectorAll("details[data-boat]")) {
     if (open.has(details.dataset.boat)) details.open = true;
     details.addEventListener("toggle", () => details.open && loadDiff(details));

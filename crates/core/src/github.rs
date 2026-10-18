@@ -82,7 +82,7 @@ pub fn start_device_flow(endpoints: &Endpoints, client_id: &str) -> Result<Devic
         .post(format!("{}/login/device/code", endpoints.web))
         .header("Accept", "application/json")
         .header("User-Agent", USER_AGENT)
-        .send_form([("client_id", client_id), ("scope", "public_repo repo")])
+        .send_form([("client_id", client_id), ("scope", "repo")])
         .map_err(|e| describe(&e))?;
     let body: Value = response.body_mut().read_json().map_err(|e| describe(&e))?;
     serde_json::from_value(body.clone()).map_err(|_| {
@@ -333,5 +333,35 @@ mod tests {
                 .unwrap_err()
                 .contains("could not reach GitHub")
         );
+    }
+
+    /// Opens a real pull request with the token of the user's `gh`; run by hand with
+    /// `LEME_PR_REPO=<folder> LEME_PR_BRANCH=<branch> LEME_PR_BASE=main cargo test -p leme-core -- --ignored real_pull_request`.
+    #[test]
+    #[ignore = "pushes a branch and opens a pull request on GitHub"]
+    fn real_pull_request() {
+        let (Ok(folder), Ok(branch), Ok(base)) =
+            (std::env::var("LEME_PR_REPO"), std::env::var("LEME_PR_BRANCH"), std::env::var("LEME_PR_BASE"))
+        else {
+            panic!("set LEME_PR_REPO, LEME_PR_BRANCH and LEME_PR_BASE");
+        };
+        let repo = crate::git::Repo::open(std::path::Path::new(&folder)).unwrap();
+        let (owner, name) = remote_slug(&repo.remote_url("origin").unwrap()).unwrap();
+        let token = gh_token().expect("gh is signed in");
+        repo.push(&branch).unwrap();
+        let opened = open_pull_request(
+            &Endpoints::default(),
+            &token,
+            &owner,
+            &name,
+            &branch,
+            &base,
+            "Self test: please close",
+            "Opened by a test of Leme Pier.",
+        )
+        .unwrap();
+        println!("OPENED {}", opened.url);
+        let again = open_pull_request(&Endpoints::default(), &token, &owner, &name, &branch, &base, "x", "x").unwrap();
+        assert_eq!(again.number, opened.number, "asking twice returns the same pull request");
     }
 }

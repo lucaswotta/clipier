@@ -18,7 +18,8 @@ scripts/verify.sh quick      # format and lint only, while you work
 - `platform/` is the only place that tells Linux from Windows. Windows code is compiled by CI; to lint
   it locally run `rustup target add x86_64-pc-windows-gnu` once, and `verify.sh` does the rest.
 - A new dependency needs a reason in the commit message.
-- No telemetry, no network request of our own, no analytics. Not even opt-in.
+- No telemetry and no analytics, not even opt-in. The only network request Leme makes is to GitHub, when the
+  user asks for a pull request; a new one needs a very good reason.
 
 ## Adding an agent
 

@@ -49,8 +49,8 @@ If you pay for more than one coding agent, you know the cost of switching: the n
 |  |  |
 |---|---|
 | **Chat** | One conversation you can continue with another agent or model. A reply names the agent and model that wrote it. When the agent changes, the next one gets a short briefing built *without a model call*: what it has not seen, the state of the repository and the project's notes. An agent that spoke last resumes its own session with no briefing at all. |
-| **Race** | One brief sent to up to four agent and model pairs at once, each on its own git worktree. Your project's check (its tests) runs on each result and the work waits on a branch per boat: you read what each did and keep one. |
-| **Crew** | A captain role splits a brief into pieces. You read the plan, then the pieces run side by side where they do not depend on each other. Each is checked, can be looked over by a reviewer, and merges into one integration branch. It asks you only when a piece fails, does not merge, or is turned back twice. |
+| **Race** | One brief sent to up to four agent and model pairs at once, each on its own git worktree. Your project's check (its tests) runs on each result and the work waits on a branch per boat: you read what each did and keep one, by merging it yourself or with a button that opens a pull request. |
+| **Crew** | A captain role splits a brief into pieces. You read the plan, then the pieces run side by side where they do not depend on each other. Each is checked, can be looked over by a reviewer, and merges into one integration branch. It asks you only when a piece fails, does not merge, or is turned back twice. When it is done, one click opens a pull request from the integration branch. |
 | **Notes** | Facts about your project that agents leave for the next one (a command, a convention), kept as plain markdown files you can read and delete. |
 | **Agents** | What each CLI says about itself: version, sign-in, models, how much of the Claude allowance is used, what has gone through Leme, and who plays each role. |
 
@@ -134,7 +134,7 @@ parallel = 3              # pieces that may run at the same time
 
 A Race or a Crew never touches your checkout, branch or index: agents work in git worktrees and the result is verified at the end. The check runs with secrets removed and, where there is a sandbox, with no network. Agents that run commands without asking only run inside a sandbox. Notes that look like credentials are refused. [SECURITY.md](SECURITY.md) says what is and is not guaranteed: a Chat, for example, edits the folder you point it at, as the CLI would in a terminal.
 
-No accounts, no telemetry, no network request of its own, no model API keys, no plugins, no background runs. It is a tool you sit in front of.
+No accounts, no telemetry, no model API keys, no plugins, no background runs. The only network request Leme Pier makes itself is to GitHub, and only when you click *Open a pull request* ([how it signs in](docs/GITHUB.md)). It is a tool you sit in front of.
 
 ## Status
 
