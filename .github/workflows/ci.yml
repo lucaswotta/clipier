@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# A newer push makes the run of the older one pointless, and minutes are not free on private repositories.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     strategy:
