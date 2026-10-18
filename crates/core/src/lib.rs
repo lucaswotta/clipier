@@ -2,6 +2,7 @@
 
 pub mod agents;
 pub mod check;
+pub mod crew;
 pub mod git;
 pub mod id;
 pub mod memory;

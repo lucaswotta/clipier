@@ -169,7 +169,18 @@ impl Repo {
 
     /// What `branch` adds on top of `base`, cut to `limit` characters.
     pub fn diff(&self, base: &str, branch: &str, limit: usize) -> Result<String> {
-        let text = git(&self.dir, &["diff", "--no-color", base, branch])?;
+        self.diff_of(&[base, branch], limit)
+    }
+
+    /// What `branch` changed since it left `base`, ignoring what `base` gained meanwhile.
+    pub fn change(&self, base: &str, branch: &str, limit: usize) -> Result<String> {
+        self.diff_of(&[&format!("{base}...{branch}")], limit)
+    }
+
+    fn diff_of(&self, revisions: &[&str], limit: usize) -> Result<String> {
+        let mut args = vec!["diff", "--no-color"];
+        args.extend(revisions);
+        let text = git(&self.dir, &args)?;
         if text.chars().count() <= limit {
             return Ok(text);
         }
