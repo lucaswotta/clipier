@@ -1,4 +1,4 @@
-# Contributing to Leme Pier
+# Contributing to Clipier
 
 Thanks for looking. The project is small on purpose: a feature that needs a new subsystem is one
 we will probably decline, and a change that makes the code shorter is welcome. Read
@@ -18,7 +18,7 @@ scripts/verify.sh quick      # format and lint only, while you work
 - `platform/` is the only place that tells Linux from Windows. Windows code is compiled by CI; to lint
   it locally run `rustup target add x86_64-pc-windows-gnu` once, and `verify.sh` does the rest.
 - A new dependency needs a reason in the commit message.
-- No telemetry and no analytics, not even opt-in. The only network request Leme makes is to GitHub, when the
+- No telemetry and no analytics, not even opt-in. The only network request Clipier makes is to GitHub, when the
   user asks for a pull request; a new one needs a very good reason.
 
 ## Adding an agent

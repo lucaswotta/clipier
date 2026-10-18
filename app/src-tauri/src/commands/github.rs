@@ -1,17 +1,17 @@
-//! Opening a pull request: signing in to GitHub and sending a branch of Leme's own.
+//! Opening a pull request: signing in to GitHub and sending a branch of Clipier's own.
 
-use leme_core::git::Repo;
-use leme_core::github::{self, DeviceCode, Endpoints, Poll, PullRequest};
+use clipier_core::git::Repo;
+use clipier_core::github::{self, DeviceCode, Endpoints, Poll, PullRequest};
 use serde::Serialize;
 
 use super::repository_path;
 
-/// The OAuth App the user registered for Leme Pier, from the environment or built in at compile time.
+/// The OAuth App the user registered for Clipier, from the environment or built in at compile time.
 /// Without one, the device flow is not offered; a `gh` sign-in still works.
 fn client_id() -> Option<String> {
-    std::env::var("LEME_PIER_GITHUB_CLIENT_ID")
+    std::env::var("CLIPIER_GITHUB_CLIENT_ID")
         .ok()
-        .or_else(|| option_env!("LEME_PIER_GITHUB_CLIENT_ID").map(str::to_owned))
+        .or_else(|| option_env!("CLIPIER_GITHUB_CLIENT_ID").map(str::to_owned))
         .filter(|id| !id.trim().is_empty())
 }
 
@@ -77,7 +77,7 @@ pub fn github_disconnect() {
     github::forget_token();
 }
 
-/// Pushes `branch` to origin and opens a pull request into `base`. Only a branch Leme made may be sent.
+/// Pushes `branch` to origin and opens a pull request into `base`. Only a branch Clipier made may be sent.
 #[tauri::command]
 pub async fn github_open_pr(
     repository: String,
@@ -87,8 +87,8 @@ pub async fn github_open_pr(
     body: String,
 ) -> Result<PullRequest, String> {
     let path = repository_path(&repository)?;
-    if !branch.starts_with("leme/") {
-        return Err("only a branch Leme Pier made can be sent".into());
+    if !branch.starts_with("clipier/") {
+        return Err("only a branch Clipier made can be sent".into());
     }
     if base.is_empty() || base == "HEAD" {
         return Err("the checkout was not on a branch, so there is nothing to open the pull request into".into());

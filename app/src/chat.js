@@ -4,9 +4,9 @@ import { escapeHtml } from "./text.js";
 import { words } from "./vocabulary.js";
 import { fleet, loadFleet, modelControl, agentOptions } from "./fleet.js";
 
-const REPOSITORY_KEY = "leme-pier.repository";
-const AGENT_KEY = "leme-pier.chat.agent";
-const MODEL_KEY = "leme-pier.chat.model";
+const REPOSITORY_KEY = "clipier.repository";
+const AGENT_KEY = "clipier.chat.agent";
+const MODEL_KEY = "clipier.chat.model";
 const POLL_MS = 700;
 
 const state = {

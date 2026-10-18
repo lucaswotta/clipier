@@ -7,17 +7,17 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Sender};
 use std::sync::{Arc, Mutex, PoisonError};
 
-use leme_core::agents::{Environment, Event};
-use leme_core::check::{self, Check};
-use leme_core::config;
-use leme_core::crew::{self, Command, Crew, PieceState, Setup};
-use leme_core::git::Repo;
-use leme_core::id::{run_name, uuid};
-use leme_core::memory::{Memory, Stored};
-use leme_core::plan::{Piece, Plan};
-use leme_core::platform::sandbox;
-use leme_core::roles::{self, Roles};
-use leme_core::store::{self, Layout};
+use clipier_core::agents::{Environment, Event};
+use clipier_core::check::{self, Check};
+use clipier_core::config;
+use clipier_core::crew::{self, Command, Crew, PieceState, Setup};
+use clipier_core::git::Repo;
+use clipier_core::id::{run_name, uuid};
+use clipier_core::memory::{Memory, Stored};
+use clipier_core::plan::{Piece, Plan};
+use clipier_core::platform::sandbox;
+use clipier_core::roles::{self, Roles};
+use clipier_core::store::{self, Layout};
 use serde::{Deserialize, Serialize};
 use tauri::State;
 
@@ -219,7 +219,7 @@ pub struct CrewSummary {
 
 #[tauri::command]
 pub fn crew_list(crews: State<'_, Crews>) -> Vec<CrewSummary> {
-    use leme_core::crew::Phase;
+    use clipier_core::crew::Phase;
     let running = crews.active.lock().unwrap_or_else(PoisonError::into_inner);
     crew::list(&Layout::standard())
         .iter()
@@ -259,7 +259,7 @@ pub struct View {
 
 #[tauri::command]
 pub fn crew_view(crews: State<'_, Crews>, id: String) -> Result<View, String> {
-    use leme_core::crew::Phase;
+    use clipier_core::crew::Phase;
     let layout = Layout::standard();
     let running = crews.active.lock().unwrap_or_else(PoisonError::into_inner).contains_key(&id);
     let crew = crew::load(&layout, &id)?;

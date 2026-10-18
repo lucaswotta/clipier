@@ -6,7 +6,7 @@ resolver = "3"
 version = "0.0.1"
 edition = "2024"
 license = "Apache-2.0"
-repository = "https://github.com/lucaswotta/leme-pier"
+repository = "https://github.com/lucaswotta/clipier"
 
 [workspace.lints.clippy]
 pedantic = { level = "warn", priority = -1 }

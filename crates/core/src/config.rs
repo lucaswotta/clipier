@@ -1,4 +1,4 @@
-//! The project's own settings: `.leme-pier/config.toml` in the repository, all optional.
+//! The project's own settings: `.clipier/config.toml` in the repository, all optional.
 //!
 //! ```toml
 //! check = "cargo test"       # what a piece must pass
@@ -16,7 +16,7 @@ use crate::crew::DEFAULT_PARALLEL;
 
 /// Where a project keeps its settings and its roles.
 pub fn project_folder(repository: &Path) -> PathBuf {
-    repository.join(".leme-pier")
+    repository.join(".clipier")
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -71,7 +71,7 @@ pub fn parse(text: &str) -> Result<Project, String> {
 /// The project's settings, or the defaults when there is no file.
 pub fn load(repository: &Path) -> Result<Project, String> {
     match fs::read_to_string(project_folder(repository).join("config.toml")) {
-        Ok(text) => parse(&text).map_err(|error| format!(".leme-pier/config.toml: {error}")),
+        Ok(text) => parse(&text).map_err(|error| format!(".clipier/config.toml: {error}")),
         Err(_) => Ok(Project::default()),
     }
 }

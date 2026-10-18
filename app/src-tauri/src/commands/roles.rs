@@ -1,10 +1,10 @@
 //! Roles, the project's settings and its notes.
 
-use leme_core::agents::Agent;
-use leme_core::config::{self, Project};
-use leme_core::memory::{Memory, Stored};
-use leme_core::roles::{self, Assignment, Fallback, Role, Source};
-use leme_core::store::{self, Layout};
+use clipier_core::agents::Agent;
+use clipier_core::config::{self, Project};
+use clipier_core::memory::{Memory, Stored};
+use clipier_core::roles::{self, Assignment, Fallback, Role, Source};
+use clipier_core::store::{self, Layout};
 use serde::Serialize;
 use tauri::State;
 

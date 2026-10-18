@@ -1,10 +1,10 @@
-# Leme Pier: arquitetura
+# Clipier: arquitetura
 
 Status: descreve o que a 0.0.1 é. Onde o código e este arquivo discordam, o código está certo e este arquivo tem um erro. [English](ARCHITECTURE.md)
 
 ## O que é
 
-O Leme Pier é um app de desktop que encontra os CLIs de IA para programar já instalados e com login na sua máquina (`claude`, `codex`, `agy`, `opencode`) e deixa você usá-los num só lugar:
+O Clipier é um app de desktop que encontra os CLIs de IA para programar já instalados e com login na sua máquina (`claude`, `codex`, `agy`, `opencode`) e deixa você usá-los num só lugar:
 
 - **Chat.** Uma conversa que você pode continuar com outro agente ou modelo sem começar de novo. O próximo agente recebe um briefing do que aconteceu; ninguém relê o repositório inteiro.
 - **Regata.** Um pedido enviado a até quatro pares de agente e modelo ao mesmo tempo. Cada um trabalha na sua própria cópia do projeto. Você lê os resultados e fica com um.
@@ -13,7 +13,7 @@ O Leme Pier é um app de desktop que encontra os CLIs de IA para programar já i
 
 Ele não chama nenhuma API de modelo. Inicia os CLIs oficiais com os logins que você já fez.
 
-O nome é o cais onde os seus agentes se encontram; o executável é `leme`. A tagline é "Every agent, one dock" ("Todos os agentes, um só cais").
+O nome é CLI mais pier, o cais onde os seus agentes se encontram; o executável é `clipier`. A tagline é "Every agent, one dock" ("Todos os agentes, um só cais").
 
 ### Fora do escopo
 
@@ -24,7 +24,7 @@ Sem serviço hospedado, sem contas, sem telemetria, sem chaves de API de modelo,
 1. **Pequeno.** Meta de 4 a 5 mil linhas de Rust e cerca de 2 mil de JavaScript, sem contar testes. Uma funcionalidade que exige um subsistema novo é uma funcionalidade que recusamos.
 2. **Explicável.** Cada modo precisa ser explicável a uma criança de doze anos em duas frases. Se não der, o modo é redesenhado, não documentado.
 3. **Uma Regata ou uma Tripulação nunca toca no seu checkout.** Os agentes delas trabalham em git worktrees e o que produzem fica em branches até você decidir. O Chat é a exceção, como num terminal: o agente edita a pasta que você apontou, e a tela mostra o estado do repositório para você ver o que mudou.
-4. **Quem pensa são os agentes.** O Leme não escolhe nada pelo modelo: sem prompts escondidos que mudem o comportamento, sem novas tentativas que gastem token em silêncio. Ele encaminha, isola, registra e informa.
+4. **Quem pensa são os agentes.** O Clipier não escolhe nada pelo modelo: sem prompts escondidos que mudem o comportamento, sem novas tentativas que gastem token em silêncio. Ele encaminha, isola, registra e informa.
 5. **Só local.** Tudo é um arquivo no seu disco. Nada sai da máquina além do que os próprios CLIs dos agentes enviam, e uma branch com um pull request para o GitHub quando o usuário clica para isso.
 6. **Aberto desde o primeiro commit.** Apache-2.0. O histórico é escrito para ser lido.
 
@@ -36,7 +36,7 @@ A interface é náutica; o código usa o termo simples e a interface faz o mapea
 |---|---|---|
 | agent | agente | Um dos CLIs: `claude`, `codex`, `agy`, `opencode` |
 | model | modelo | O modelo que um agente roda; vazio significa o padrão do CLI |
-| conversation | conversa | Um registro de chat, guardado pelo Leme |
+| conversation | conversa | Um registro de chat, guardado pelo Clipier |
 | brief | o pedido | O que o usuário pede |
 | race / boat | Regata / barco | Um pedido a vários agentes em paralelo / um deles |
 | crew / piece | Tripulação / parte | Um pedido executado por um plano / um passo do plano |
@@ -48,7 +48,7 @@ A interface é náutica; o código usa o termo simples e a interface faz o mapea
 ## Layout do repositório
 
 ```
-leme-pier/
+clipier/
   Cargo.toml                 workspace
   crates/
     core/                    tudo o que não é janela (biblioteca, testável sem uma)
@@ -129,7 +129,7 @@ Arquivos markdown por repositório, uma nota por arquivo, com front matter. Text
 
 ### `usage`
 
-Um registro só de acréscimo do que cada agente fez pelo Leme: agente, modelo, papel, tokens (novos, em cache, saída), duração, resultado. A tela de Agentes lê dele. Substitui as estatísticas que o protótipo lia da ferramenta antiga.
+Um registro só de acréscimo do que cada agente fez pelo Clipier: agente, modelo, papel, tokens (novos, em cache, saída), duração, resultado. A tela de Agentes lê dele. Substitui as estatísticas que o protótipo lia da ferramenta antiga.
 
 ### `git`
 
@@ -137,7 +137,7 @@ Worktrees na pasta de dados, uma por barco ou parte, a partir do commit inicial;
 
 ### `check`
 
-Detecta o comando de teste do projeto (`cargo test`, `npm test`, `pytest`, `go test`, `make test`, ...) ou usa um de `.leme-pier/config.toml` ou do formulário. Roda numa worktree com limite de tempo, guarda o fim da saída e informa passou ou falhou.
+Detecta o comando de teste do projeto (`cargo test`, `npm test`, `pytest`, `go test`, `make test`, ...) ou usa um de `.clipier/config.toml` ou do formulário. Roda numa worktree com limite de tempo, guarda o fim da saída e informa passou ou falhou.
 
 ## Papéis
 
@@ -159,7 +159,7 @@ Ao terminar, responda com um resumo curto do que mudou.
 ```
 
 - Os papéis **de fábrica** vêm com o app: `captain` (lê), `builder` (escreve), `reviewer` (lê), `tester` (lê). Existem em inglês, português e espanhol.
-- Papéis **do usuário**: `~/.config/leme-pier/roles/*.md`. Papéis **do projeto**: `.leme-pier/roles/*.md`, versionados com o código. Um arquivo com o mesmo `name` sobrescreve o anterior (projeto sobre usuário sobre fábrica).
+- Papéis **do usuário**: `~/.config/clipier/roles/*.md`. Papéis **do projeto**: `.clipier/roles/*.md`, versionados com o código. Um arquivo com o mesmo `name` sobrescreve o anterior (projeto sobre usuário sobre fábrica).
 - A **reserva** é usada uma vez, e só quando o agente está inutilizável ou limitado, nunca por uma resposta ruim. É a única recuperação automática do app.
 - Um papel que cita um agente não instalado aparece como indisponível na tela de Agentes e não pode ser atribuído.
 
@@ -167,7 +167,7 @@ A escolha de modelos por papel acontece numa tela: uma linha por papel com um se
 
 ### Configuração do projeto
 
-`.leme-pier/config.toml`, opcional:
+`.clipier/config.toml`, opcional:
 
 ```toml
 check = "cargo test"       # o que uma parte precisa passar
@@ -181,7 +181,7 @@ parallel = 3               # partes que podem rodar ao mesmo tempo
 1. Entrada: repositório, pedido, de 1 a 4 barcos (agente e modelo cada), verificação opcional.
 2. Cada barco recebe uma worktree e roda em sua própria thread com o pedido, uma frase dizendo que outros trabalham na mesma tarefa em outro lugar e as notas do projeto.
 3. Quando um barco termina: commit, registro dos arquivos alterados, execução da verificação, registro do veredito.
-4. Saída por barco: resumo, arquivos, veredito da verificação, tokens, duração, nome da branch, diff. As branches são `leme/<run>/<boat>`. A tela mostra os comandos para inspecionar e reunir uma.
+4. Saída por barco: resumo, arquivos, veredito da verificação, tokens, duração, nome da branch, diff. As branches são `clipier/<run>/<boat>`. A tela mostra os comandos para inspecionar e reunir uma.
 5. Nada é integrado automaticamente. As worktrees são removidas no fim; as branches ficam.
 
 "Melhorar meu pedido" é um turno separado, opcional, só de leitura, que reescreve o pedido; o usuário pode desfazer e editar. Nunca é aplicado em silêncio.
@@ -216,7 +216,7 @@ O usuário lê o plano e aprova (`approve_plan = false` pula a leitura; o plano 
 
 1. Uma parte está **pronta** quando tudo em seu `after` foi reunido (ou, para uma revisão, terminou).
 2. As partes prontas começam, até `parallel` por vez (padrão 3), cada uma numa worktree criada a partir da branch de integração como ela está agora. Uma parte também recebe os resumos das partes de que depende (`after`), já que o código reunido não diz por que foi escrito daquele jeito.
-3. Uma parte de escrita terminada é commitada, tem o escopo conferido, passa pela verificação e é reunida na branch de integração (`leme/<run>/integration`). Um conflito nunca é forçado.
+3. Uma parte de escrita terminada é commitada, tem o escopo conferido, passa pela verificação e é reunida na branch de integração (`clipier/<run>/integration`). Um conflito nunca é forçado.
 4. Uma parte de revisão terminada devolve `approved` ou uma lista de mudanças. Mudanças mandam a parte revisada de volta uma vez, com as notas; uma segunda reprovação pergunta ao usuário.
 5. A execução termina quando toda parte foi reunida, pulada ou parada.
 
@@ -234,30 +234,30 @@ Todo o resto segue. Um botão de cancelar para todos os processos.
 
 | O quê | Onde (Linux) |
 |---|---|
-| Conversas | `$XDG_DATA_HOME/leme-pier/conversations/<id>/` |
+| Conversas | `$XDG_DATA_HOME/clipier/conversations/<id>/` |
 | Regatas e tripulações | `.../runs/<id>/` (`run.json`, `events.jsonl`, `out/`) |
 | Worktrees | `.../worktrees/<run>/<piece>/` |
 | Memória | `.../memory/<repo-key>/<note>.md` |
 | Uso | `.../usage.jsonl` |
-| Papéis e ajustes do usuário | `$XDG_CONFIG_HOME/leme-pier/` |
-| Ajustes e papéis do projeto | `.leme-pier/` no repositório |
+| Papéis e ajustes do usuário | `$XDG_CONFIG_HOME/clipier/` |
+| Ajustes e papéis do projeto | `.clipier/` no repositório |
 
 Todo arquivo JSON leva um campo `version`. Um leitor que encontra uma versão mais nova a recusa e diz isso. As gravações passam por um arquivo temporário e um rename. Uma linha cortada por uma queda é ignorada na leitura.
 
 ## Modelo de segurança
 
-O que o Leme garante:
+O que o Clipier garante:
 
-- O checkout, a branch e o índice do usuário não são tocados; o Leme consegue verificar isso e avisa quando não consegue.
+- O checkout, a branch e o índice do usuário não são tocados; o Clipier consegue verificar isso e avisa quando não consegue.
 - Cada barco e cada parte escreve só na sua worktree. O `touches` de uma parte de escrita é conferido depois: mudanças fora do escopo são apontadas e bloqueiam a reunião.
 - A verificação do projeto roda sem segredos no ambiente, com limite de tempo e, onde a plataforma tem, num sandbox sem rede (bubblewrap).
 - Variáveis de ambiente que parecem segredos são removidas de todo processo de agente.
-- O Leme nunca inicia uma execução de dentro de uma execução que ele mesmo iniciou (uma variável de guarda), então um agente não consegue criar uma tripulação recursivamente.
+- O Clipier nunca inicia uma execução de dentro de uma execução que ele mesmo iniciou (uma variável de guarda), então um agente não consegue criar uma tripulação recursivamente.
 - Notas que parecem credenciais nunca são guardadas.
 
 O que ele não garante, e diz isso no `SECURITY.md`:
 
-- Os agentes rodam com os seus logins e as suas permissões. O Leme pede a cada CLI o modo que aceita edições e tem sandbox quando existe; não substitui a segurança do próprio CLI.
+- Os agentes rodam com os seus logins e as suas permissões. O Clipier pede a cada CLI o modo que aceita edições e tem sandbox quando existe; não substitui a segurança do próprio CLI.
 - Onde não há sandbox (Windows), a verificação roda sem sandbox. A interface avisa.
 
 ## O app
@@ -286,7 +286,7 @@ Os testes existem para pegar o que machucaria um usuário. Não medem esforço, 
   - as operações de git (worktrees, commit, merge, escopo, conflito) num repositório temporário;
   - a validação do plano (ciclos, sobreposição, papéis desconhecidos), as sessões e o briefing, o filtro da memória;
   - um teste ponta a ponta de uma Regata e um de uma Tripulação com agentes de mentira.
-- **Fora da suíte padrão:** agentes reais, benchmarks e o self-test da janela. Os testes com agentes reais são marcados `#[ignore]` e rodados à mão. O self-test da janela (`LEME_PIER_SELFTEST=<arquivo>`, cobrindo os três idiomas) roda quando a interface muda e antes de uma versão, não a cada commit.
+- **Fora da suíte padrão:** agentes reais, benchmarks e o self-test da janela. Os testes com agentes reais são marcados `#[ignore]` e rodados à mão. O self-test da janela (`CLIPIER_SELFTEST=<arquivo>`, cobrindo os três idiomas) roda quando a interface muda e antes de uma versão, não a cada commit.
 - Um teste IPC do Tauri confere que os comandos funcionam e que as APIs não permitidas são negadas.
 - Nenhum benchmark vai na 0.0.1. Se um briefing economiza tokens é medido depois que o app estiver utilizável; o método e os resultados vão para `docs/`.
 
@@ -312,7 +312,7 @@ Cada commit compila e passa no `scripts/verify.sh` sozinho, no Linux e no Window
 
 ## Riscos e pontos em aberto
 
-- **Nome.** Uma empresa chamada Leme (leme.ai) lança um produto de IA e tem um repositório de CLI para agentes de código. A consulta de marca (INPI e outras) está pendente, e o nome fica num só lugar para poder mudar.
+- **Nome.** Não achei produto, repositório, crate, pacote npm ou PyPI chamado Clipier. A busca de marca no INPI está pendente, e o `clipier.com` pertence a outra pessoa (`.dev`, `.app`, `.io`, `.org`, `.ai`, `.net` e `.com.br` estavam sem registro na consulta).
 - **Termos de uso.** Os termos dos fornecedores sobre dirigir os CLIs oficiais por outro programa estão resumidos em [docs/VENDOR_TERMS.md](docs/VENDOR_TERMS.md) (em inglês). O `agy` é o mais incerto.
 - **Deriva de formato.** Os CLIs mudam a saída. Os adaptadores e seus testes com saída gravada são a defesa; uma quebra é um conserto de um arquivo.
 - **A promessa a provar.** Que um briefing deixa o próximo agente mais barato que começar do zero é uma suposição com um único dado. É medida depois da 0.0.1 e reportada nos dois casos.

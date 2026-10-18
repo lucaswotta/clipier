@@ -161,7 +161,7 @@ fn verdict(check: &Check, tree: &Worktree, piece: &Piece<'_>) -> BoatCheck {
 
 /// A writing piece: the agent edits its worktree, the change is checked, scoped and committed.
 fn write(piece: &Piece<'_>, state: &PieceState, own: Option<Worktree>) -> (Outcome, Option<Worktree>) {
-    let branch = format!("leme/{}/{}", piece.run, piece.id);
+    let branch = format!("clipier/{}/{}", piece.run, piece.id);
     let tree = if let Some(tree) = own {
         tree
     } else {

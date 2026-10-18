@@ -1,4 +1,4 @@
-//! Leme Pier without a window. See `ARCHITECTURE.md` for what lives here and what does not.
+//! Clipier without a window. See `ARCHITECTURE.md` for what lives here and what does not.
 
 pub mod agents;
 pub mod check;

@@ -18,8 +18,8 @@ use std::time::{Duration, Instant};
 
 use crate::platform;
 
-/// Set in every process Leme starts, so that an agent cannot start runs of its own.
-pub const NESTING_GUARD: &str = "LEME_PIER_RUN";
+/// Set in every process Clipier starts, so that an agent cannot start runs of its own.
+pub const NESTING_GUARD: &str = "CLIPIER_RUN";
 const POLL: Duration = Duration::from_millis(50);
 const STDERR_TAIL: usize = 4096;
 
@@ -181,7 +181,7 @@ mod tests {
     use std::sync::Arc;
 
     fn folder(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("leme-runner-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("clipier-runner-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
         dir
@@ -272,17 +272,17 @@ mod tests {
     #[test]
     fn a_program_that_does_not_exist_is_an_error_naming_it() {
         let dir = folder("missing");
-        let spawn = Spawn { program: "leme-no-such-agent".into(), ..spawn_script(&dir, "") };
+        let spawn = Spawn { program: "clipier-no-such-agent".into(), ..spawn_script(&dir, "") };
         let error = run(&spawn, &dir.join("out.txt"), limits(1_000, 1_000), &AtomicBool::new(false), |_| {})
             .expect_err("it cannot start");
-        assert!(error.to_string().contains("leme-no-such-agent"));
+        assert!(error.to_string().contains("clipier-no-such-agent"));
         let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]
     fn secrets_are_removed_and_the_guard_is_set_for_the_process() {
         let dir = folder("env");
-        let mut spawn = spawn_script(&dir, r#"echo "[$MY_API_KEY][$LEME_PIER_RUN]""#);
+        let mut spawn = spawn_script(&dir, r#"echo "[$MY_API_KEY][$CLIPIER_RUN]""#);
         // SAFETY: the test sets a variable of its own name and nothing else reads it.
         unsafe { std::env::set_var("MY_API_KEY", "hunter2") };
         spawn.env_remove = secret_names(&[("MY_API_KEY".into(), "hunter2".into()), ("PATH".into(), "/bin".into())]);

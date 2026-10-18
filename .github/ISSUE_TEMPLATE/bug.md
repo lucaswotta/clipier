@@ -10,4 +10,4 @@ labels: bug
 
 **How to reproduce**
 
-**Environment**: Leme Pier version, operating system, which agent CLIs and their versions (`claude --version`, ...).
+**Environment**: Clipier version, operating system, which agent CLIs and their versions (`claude --version`, ...).

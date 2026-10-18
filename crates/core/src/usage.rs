@@ -1,5 +1,5 @@
-//! What each agent did through Leme Pier: one line per use, appended to a file, read back as totals
-//! for the Agents screen. It is Leme's own record, so it counts exactly what went through it.
+//! What each agent did through Clipier: one line per use, appended to a file, read back as totals
+//! for the Agents screen. It is Clipier's own record, so it counts exactly what went through it.
 
 use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn totals_count_uses_deliveries_tokens_with_cache_at_a_tenth_and_the_average_time() {
-        let file = std::env::temp_dir().join(format!("leme-usage-{}", std::process::id())).join("usage.jsonl");
+        let file = std::env::temp_dir().join(format!("clipier-usage-{}", std::process::id())).join("usage.jsonl");
         let _ = fs::remove_dir_all(file.parent().unwrap());
         let log = Log::new(&file);
         log.record(&usage("claude", Outcome::Delivered, 100, 1000, 2000)).unwrap();

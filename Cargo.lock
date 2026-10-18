@@ -329,6 +329,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "clipier-app"
+version = "0.0.1"
+dependencies = [
+ "clipier-core",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+]
+
+[[package]]
+name = "clipier-core"
+version = "0.0.1"
+dependencies = [
+ "getrandom 0.3.4",
+ "libc",
+ "serde",
+ "serde_json",
+ "ureq",
+]
+
+[[package]]
 name = "combine"
 version = "4.6.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1683,28 +1705,6 @@ checksum = "0fbe853b403ae61a04233030ae8a79d94975281ed9770a1f9e246732b534b28d"
 dependencies = [
  "bitflags 2.13.2",
  "serde",
-]
-
-[[package]]
-name = "leme-core"
-version = "0.0.1"
-dependencies = [
- "getrandom 0.3.4",
- "libc",
- "serde",
- "serde_json",
- "ureq",
-]
-
-[[package]]
-name = "leme-pier-app"
-version = "0.0.1"
-dependencies = [
- "leme-core",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
 ]
 
 [[package]]

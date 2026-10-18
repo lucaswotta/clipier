@@ -145,7 +145,7 @@ pub fn load(layout: &Layout, id: &str) -> Result<Crew, String> {
     let bytes = fs::read(folder(layout, id)?.join(STATE)).map_err(|e| format!("no such crew: {e}"))?;
     let crew: Crew = serde_json::from_slice(&bytes).map_err(|e| e.to_string())?;
     if crew.version > VERSION {
-        return Err(format!("this crew was written by a newer Leme Pier (format {})", crew.version));
+        return Err(format!("this crew was written by a newer Clipier (format {})", crew.version));
     }
     Ok(crew)
 }
@@ -317,7 +317,7 @@ impl Crew {
             updated_ms: now_ms(),
             base: String::new(),
             base_branch: String::new(),
-            integration: format!("leme/{id}/integration"),
+            integration: format!("clipier/{id}/integration"),
             pieces,
             finished: false,
             error: None,
@@ -500,7 +500,7 @@ impl<'a> Loop<'a> {
             return;
         };
         let title = self.crew().piece(id).map(|s| s.piece.title.clone()).unwrap_or_default();
-        let message = format!("chore(leme): merge {id}: {title}");
+        let message = format!("chore(clipier): merge {id}: {title}");
         match self.integration.merge(&tree.branch, &message) {
             Ok(Merge::Merged) => {
                 self.drop_tree(id);
@@ -670,7 +670,7 @@ mod tests {
     use std::sync::mpsc::Sender;
 
     fn folder_of(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("leme-crew-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("clipier-crew-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir

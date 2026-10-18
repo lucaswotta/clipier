@@ -122,7 +122,7 @@ mark.addEventListener("click", () => {
   mark.classList.add("waving");
 });
 
-const THEME_KEY = "leme-pier.theme";
+const THEME_KEY = "clipier.theme";
 const themeToggle = document.getElementById("theme-toggle");
 
 function applyTheme(theme) {

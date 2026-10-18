@@ -85,7 +85,7 @@ mod tests {
     #[test]
     fn a_secret_file_is_readable_by_its_owner_only() {
         use std::os::unix::fs::PermissionsExt;
-        let file = std::env::temp_dir().join(format!("leme-private-{}", std::process::id()));
+        let file = std::env::temp_dir().join(format!("clipier-private-{}", std::process::id()));
         std::fs::write(&file, "token").unwrap();
         keep_private(&file).unwrap();
         assert_eq!(std::fs::metadata(&file).unwrap().permissions().mode() & 0o777, 0o600);

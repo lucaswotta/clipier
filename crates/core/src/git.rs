@@ -1,7 +1,7 @@
-//! Git, the way Leme uses it: a worktree per boat or piece, commits on its own branch, merges into
+//! Git, the way Clipier uses it: a worktree per boat or piece, commits on its own branch, merges into
 //! an integration branch, diffs, and proof that the user's checkout was never touched.
 //!
-//! The user's checkout is never written to. Everything happens on branches of Leme's own, in
+//! The user's checkout is never written to. Everything happens on branches of Clipier's own, in
 //! worktrees under the data folder.
 
 use std::collections::BTreeSet;
@@ -19,7 +19,7 @@ pub enum Error {
         args: String,
         message: String,
     },
-    /// The user's checkout changed while Leme was working.
+    /// The user's checkout changed while Clipier was working.
     Touched(String),
 }
 
@@ -29,7 +29,7 @@ impl fmt::Display for Error {
             Self::NotARepository(path) => write!(formatter, "{} is not a git repository", path.display()),
             Self::NoCommits(path) => write!(formatter, "{} has no commits yet", path.display()),
             Self::Git { args, message } => write!(formatter, "`git {args}` failed: {message}"),
-            Self::Touched(what) => write!(formatter, "the repository changed while Leme was working: {what}"),
+            Self::Touched(what) => write!(formatter, "the repository changed while Clipier was working: {what}"),
         }
     }
 }
@@ -78,10 +78,10 @@ fn fallback_identity(dir: &Path) -> Vec<(&'static str, &'static str)> {
         Vec::new()
     } else {
         vec![
-            ("GIT_AUTHOR_NAME", "Leme Pier"),
-            ("GIT_AUTHOR_EMAIL", "leme@localhost"),
-            ("GIT_COMMITTER_NAME", "Leme Pier"),
-            ("GIT_COMMITTER_EMAIL", "leme@localhost"),
+            ("GIT_AUTHOR_NAME", "Clipier"),
+            ("GIT_AUTHOR_EMAIL", "clipier@localhost"),
+            ("GIT_COMMITTER_NAME", "Clipier"),
+            ("GIT_COMMITTER_EMAIL", "clipier@localhost"),
         ]
     }
 }
@@ -274,7 +274,7 @@ mod tests {
 
     impl Sandbox {
         fn new(name: &str) -> Self {
-            let root = std::env::temp_dir().join(format!("leme-git-{name}-{}", std::process::id()));
+            let root = std::env::temp_dir().join(format!("clipier-git-{name}-{}", std::process::id()));
             let _ = std::fs::remove_dir_all(&root);
             let dir = root.join("repo");
             std::fs::create_dir_all(&dir).unwrap();
@@ -290,7 +290,7 @@ mod tests {
         }
 
         fn tree(&self, name: &str, base: &str) -> Worktree {
-            self.repo.add_worktree(&self.root.join(name), &format!("leme/{name}"), base).unwrap()
+            self.repo.add_worktree(&self.root.join(name), &format!("clipier/{name}"), base).unwrap()
         }
     }
 
@@ -313,9 +313,11 @@ mod tests {
         assert!(tree.commit("feat: add b").unwrap().is_some());
         assert_eq!(tree.commit("again").unwrap(), None, "nothing left to commit");
         assert_eq!(tree.changed_files("main").unwrap(), ["b.txt"], "a committed change is still a change");
-        assert!(git(&sandbox.repo.dir, &["show", "leme/boat:b.txt"]).unwrap().contains("two"));
+        assert!(git(&sandbox.repo.dir, &["show", "clipier/boat:b.txt"]).unwrap().contains("two"));
         assert!(
-            !git(&sandbox.repo.dir, &["ls-tree", "-r", "--name-only", "leme/boat"]).unwrap().contains("node_modules")
+            !git(&sandbox.repo.dir, &["ls-tree", "-r", "--name-only", "clipier/boat"])
+                .unwrap()
+                .contains("node_modules")
         );
         sandbox.repo.check_untouched(&before).unwrap();
 
@@ -365,7 +367,7 @@ mod tests {
         std::fs::write(tree.dir.join("b.txt"), "b").unwrap();
         tree.commit("b").unwrap();
         sandbox.repo.push(&tree.branch).unwrap();
-        assert!(git(&bare, &["branch", "--list", "leme/boat"]).unwrap().contains("leme/boat"));
+        assert!(git(&bare, &["branch", "--list", "clipier/boat"]).unwrap().contains("clipier/boat"));
         assert_eq!(sandbox.repo.remote_url("origin").as_deref(), Some(bare.to_string_lossy().as_ref()));
     }
 
@@ -377,7 +379,7 @@ mod tests {
         tree.commit("c").unwrap();
         sandbox.repo.remove_worktree(&tree).unwrap();
         assert!(!tree.dir.exists());
-        assert!(sandbox.repo.diff("main", "leme/keep", 1000).unwrap().contains("+c"));
+        assert!(sandbox.repo.diff("main", "clipier/keep", 1000).unwrap().contains("+c"));
         let empty = sandbox.root.join("empty");
         std::fs::create_dir_all(&empty).unwrap();
         git(&empty, &["init", "-q"]).unwrap();

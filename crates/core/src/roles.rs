@@ -1,5 +1,5 @@
 //! A role answers: who does this job and how are they told to. Roles are markdown files: built into
-//! the app, in the user's folder, or in the project's `.leme-pier/roles/`. A file with the same
+//! the app, in the user's folder, or in the project's `.clipier/roles/`. A file with the same
 //! name overrides the one before it (project over user over built-in).
 
 use std::fmt::Write as _;
@@ -320,7 +320,7 @@ mod tests {
 
     #[test]
     fn the_projects_files_override_the_users_which_override_the_built_in_roles() {
-        let root = std::env::temp_dir().join(format!("leme-roles-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("clipier-roles-{}", std::process::id()));
         let _ = fs::remove_dir_all(&root);
         let (user, project) = (root.join("user"), root.join("project"));
         fs::create_dir_all(&user).unwrap();

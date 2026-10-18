@@ -13,8 +13,8 @@ The first release.
 - **Crew**: a captain's plan, read before it starts, carried out by roles in parallel and merged into one
   branch; it asks only when a piece fails, does not merge, or is turned back twice.
 - **Open a pull request** from a finished boat or crew, through the device flow or the user's own `gh` sign-in.
-- **Agents** screen: what each CLI says about itself, the Claude allowance, usage through Leme, role pickers.
-- Roles as markdown files (built in, per user, per project) and `.leme-pier/config.toml`.
+- **Agents** screen: what each CLI says about itself, the Claude allowance, usage through Clipier, role pickers.
+- Roles as markdown files (built in, per user, per project) and `.clipier/config.toml`.
 - English, Brazilian Portuguese and Spanish, following the system language.
 - Linux: a `.deb`. Windows: an installer built by CI, not signed (Windows may warn) and not yet used with
   real agents.

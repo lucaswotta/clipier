@@ -1,13 +1,13 @@
-//! A check of the real window: with `LEME_PIER_SELFTEST=<file>` set, the window opens, a script drives
+//! A check of the real window: with `CLIPIER_SELFTEST=<file>` set, the window opens, a script drives
 //! the interface against the real backend, the result goes to the file and the process exits. It
 //! catches what a mocked page cannot: the webview, the permissions and the real commands.
 //!
 //! ```text
-//! (cd app && npm run build) && LEME_PIER_SELFTEST=/tmp/report.json cargo run -p leme-pier-app --features custom-protocol
+//! (cd app && npm run build) && CLIPIER_SELFTEST=/tmp/report.json cargo run -p clipier-app --features custom-protocol
 //! ```
 //!
-//! With `LEME_PIER_SELFTEST_SAIL` also set it asks a real agent one short question in the chat and
-//! sails a one-boat race, which spends a little of that agent's quota; with `LEME_PIER_SELFTEST_CREW`
+//! With `CLIPIER_SELFTEST_SAIL` also set it asks a real agent one short question in the chat and
+//! sails a one-boat race, which spends a little of that agent's quota; with `CLIPIER_SELFTEST_CREW`
 //! as well it also has a captain draw a plan and a crew carry it out.
 
 use std::path::{Path, PathBuf};
@@ -16,7 +16,7 @@ use std::sync::OnceLock;
 use tauri::{AppHandle, Webview};
 
 const SAIL_REQUEST: &str =
-    "Create a file named hello.txt in the root of the repository whose only content is the word leme.";
+    "Create a file named hello.txt in the root of the repository whose only content is the word clipier.";
 const CREW_REQUEST: &str =
     "Create a file named crew.txt in the root of the repository whose only content is the word crew.";
 const IDLE_REQUEST: &str = "Self test request: nothing will run.";
@@ -24,15 +24,15 @@ const IDLE_REQUEST: &str = "Self test request: nothing will run.";
 static SAMPLE: OnceLock<PathBuf> = OnceLock::new();
 
 pub fn requested() -> Option<PathBuf> {
-    std::env::var_os("LEME_PIER_SELFTEST").map(PathBuf::from)
+    std::env::var_os("CLIPIER_SELFTEST").map(PathBuf::from)
 }
 
 fn sailing() -> bool {
-    std::env::var_os("LEME_PIER_SELFTEST_SAIL").is_some()
+    std::env::var_os("CLIPIER_SELFTEST_SAIL").is_some()
 }
 
 fn crewing() -> bool {
-    sailing() && std::env::var_os("LEME_PIER_SELFTEST_CREW").is_some()
+    sailing() && std::env::var_os("CLIPIER_SELFTEST_CREW").is_some()
 }
 
 fn git(dir: &Path, args: &[&str]) -> Option<String> {
@@ -42,7 +42,7 @@ fn git(dir: &Path, args: &[&str]) -> Option<String> {
 
 /// A repository with one commit, for the race to work in.
 fn sample_repository() -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("leme-selftest-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("clipier-selftest-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     let _ = std::fs::create_dir_all(&dir);
     let _ = std::fs::write(dir.join("README.md"), "# Sample\n");
@@ -80,15 +80,15 @@ pub fn start(webview: &Webview) {
 /// What the repository holds after the race: the file the agent was asked for, on a boat's branch,
 /// with the checkout untouched.
 fn race_left(repository: &Path) -> Result<(), String> {
-    let branch = git(repository, &["branch", "--list", "leme/*", "--format=%(refname:short)"])
+    let branch = git(repository, &["branch", "--list", "clipier/*", "--format=%(refname:short)"])
         .and_then(|branches| branches.lines().next().map(str::to_owned))
         .ok_or("no boat branch was left in the repository")?;
     let content = git(repository, &["show", &format!("{branch}:hello.txt")]).ok_or("hello.txt is not on the branch")?;
-    if content != "leme" {
+    if content != "clipier" {
         return Err(format!("hello.txt holds {content:?}"));
     }
     if crewing() {
-        let integration = git(repository, &["branch", "--list", "leme/*/integration", "--format=%(refname:short)"])
+        let integration = git(repository, &["branch", "--list", "clipier/*/integration", "--format=%(refname:short)"])
             .and_then(|branches| branches.lines().next().map(str::to_owned))
             .ok_or("no integration branch was left by the crew")?;
         let file = git(repository, &["show", &format!("{integration}:crew.txt")])

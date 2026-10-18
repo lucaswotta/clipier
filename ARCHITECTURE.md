@@ -1,10 +1,10 @@
-# Leme Pier: architecture
+# Clipier: architecture
 
 Status: describes what 0.0.1 is. Where the code and this file disagree, the code is right and this file is a bug.
 
 ## What it is
 
-Leme Pier is a desktop app that finds the AI coding CLIs already installed and signed in on your
+Clipier is a desktop app that finds the AI coding CLIs already installed and signed in on your
 machine (`claude`, `codex`, `agy`, `opencode`), and lets you use them from one place:
 
 - **Chat.** One conversation you can continue with a different agent or model without starting
@@ -18,7 +18,7 @@ machine (`claude`, `codex`, `agy`, `opencode`), and lets you use them from one p
 
 It does not call any model API. It starts the official CLIs with the sign-ins you already made.
 
-The name is the dock where your agents meet; the executable is `leme`. The tagline is "Every agent, one dock".
+The name is CLI plus pier, the dock where your agents meet; the executable is `clipier`. The tagline is "Every agent, one dock".
 
 ### Not goals
 
@@ -35,7 +35,7 @@ engine, no autonomous background runs. It is a tool you sit in front of.
    what they produce lives on branches until you decide. A Chat is the exception, as it is in a
    terminal: the agent edits the folder you point it at, and the screen shows the repository state
    so you can see what changed.
-4. **The agents do the thinking.** Leme chooses nothing for the model: no hidden prompts that change
+4. **The agents do the thinking.** Clipier chooses nothing for the model: no hidden prompts that change
    behavior, no retries that spend tokens silently. It routes, isolates, records and briefs.
 5. **Local only.** Everything is a file on your disk. Nothing leaves the machine except what the
    agent CLIs themselves send, and one branch plus a pull request to GitHub when the user clicks for it.
@@ -49,7 +49,7 @@ The interface is nautical; the code uses the plain term and the interface maps i
 |---|---|---|
 | agent | agent | One of the CLIs: `claude`, `codex`, `agy`, `opencode` |
 | model | model | The model an agent runs; empty means the CLI's default |
-| conversation | conversation | A record of a chat, kept by Leme |
+| conversation | conversation | A record of a chat, kept by Clipier |
 | brief | the brief | What the user asks for |
 | race / boat | Race / boat | One brief to several agents in parallel / one of them |
 | crew / piece | Crew / piece | A brief carried out by a plan / one step of the plan |
@@ -61,7 +61,7 @@ The interface is nautical; the code uses the plain term and the interface maps i
 ## Repository layout
 
 ```
-leme-pier/
+clipier/
   Cargo.toml                 workspace
   crates/
     core/                    everything that is not a window (library, testable without one)
@@ -163,7 +163,7 @@ duplicates are dropped, each turn may add at most a few notes, and the user can 
 
 ### `usage`
 
-An append-only log of what each agent did through Leme: agent, model, role, tokens (new, cached, out),
+An append-only log of what each agent did through Clipier: agent, model, role, tokens (new, cached, out),
 duration, outcome. The Agents screen reads it. It replaces the statistics the prototype read from the
 old tooling.
 
@@ -178,7 +178,7 @@ was.
 ### `check`
 
 Detects the project's test command (`cargo test`, `npm test`, `pytest`, `go test`, `make test`, ...)
-or takes one from `.leme-pier/config.toml` or the form. Runs it in a worktree with a time limit, keeps the
+or takes one from `.clipier/config.toml` or the form. Runs it in a worktree with a time limit, keeps the
 tail of the output, and reports passed or failed.
 
 ## Roles
@@ -202,7 +202,7 @@ When done, reply with a short summary of what you changed.
 
 - **Built-in** roles ship with the app: `captain` (read), `builder` (write), `reviewer` (read),
   `tester` (read). They exist in English, Portuguese and Spanish.
-- **User** roles: `~/.config/leme-pier/roles/*.md`. **Project** roles: `.leme-pier/roles/*.md`,
+- **User** roles: `~/.config/clipier/roles/*.md`. **Project** roles: `.clipier/roles/*.md`,
   committed with the code. A file with the same `name` overrides the one before it
   (project over user over built-in).
 - **Fallback** is used once, and only when the agent is unusable or limited, never for a bad answer.
@@ -215,7 +215,7 @@ picker. It writes the user file.
 
 ### Project config
 
-`.leme-pier/config.toml`, optional:
+`.clipier/config.toml`, optional:
 
 ```toml
 check = "cargo test"       # what a piece must pass
@@ -231,7 +231,7 @@ parallel = 3               # pieces that may run at the same time
    others work on the same task elsewhere, and the project's notes.
 3. When a boat finishes: commit, record the changed files, run the check, record the verdict.
 4. Output per boat: summary, files, check verdict, tokens, duration, branch name, diff. Branches are
-   `leme/<run>/<boat>`. The screen shows the commands to inspect and merge one.
+   `clipier/<run>/<boat>`. The screen shows the commands to inspect and merge one.
 5. Nothing is integrated automatically. The worktrees are removed at the end; the branches stay.
 
 "Improve my brief" is a separate, optional, read-only turn that rewrites the brief; the user can undo
@@ -274,7 +274,7 @@ validated and still shown while it runs). Then, in a loop:
    the integration branch as it is now. A piece is also given the summaries of the pieces it comes
    `after`, since the merged code does not say why it was written that way.
 3. A finished write piece is committed, scope-checked, run through the check, and merged into the
-   integration branch (`leme/<run>/integration`). A conflict is never forced.
+   integration branch (`clipier/<run>/integration`). A conflict is never forced.
 4. A finished review piece returns `approved` or a list of changes. Changes send the reviewed piece
    back once with the notes; a second rejection asks the user.
 5. The run ends when every piece merged, was skipped or stopped.
@@ -293,34 +293,34 @@ Everything else proceeds. A cancel button stops every process.
 
 | What | Where (Linux) |
 |---|---|
-| Conversations | `$XDG_DATA_HOME/leme-pier/conversations/<id>/` |
+| Conversations | `$XDG_DATA_HOME/clipier/conversations/<id>/` |
 | Races and crews | `.../runs/<id>/` (`run.json`, `events.jsonl`, `out/`) |
 | Worktrees | `.../worktrees/<run>/<piece>/` |
 | Memory | `.../memory/<repo-key>/<note>.md` |
 | Usage | `.../usage.jsonl` |
-| User roles and settings | `$XDG_CONFIG_HOME/leme-pier/` |
-| Project settings and roles | `.leme-pier/` in the repository |
+| User roles and settings | `$XDG_CONFIG_HOME/clipier/` |
+| Project settings and roles | `.clipier/` in the repository |
 
 Every JSON file carries a `version` field. A reader that meets a newer version refuses it and says
 so. Writes go through a temporary file and a rename. A line cut short by a crash is skipped on read.
 
 ## Safety model
 
-What Leme guarantees:
+What Clipier guarantees:
 
-- The user's checkout, branch and index are untouched; Leme can verify it and says so when it cannot.
+- The user's checkout, branch and index are untouched; Clipier can verify it and says so when it cannot.
 - Each boat and piece writes only in its worktree. A write piece's `touches` is enforced after the
   fact: out-of-scope changes are reported and block the merge.
 - The project's check runs with secrets removed from the environment, with a time limit, and in a
   sandbox without network (bubblewrap) where the platform has one.
 - Environment variables that look like secrets are removed from every agent process.
-- Leme never starts a run from inside a run it started (a guard variable), so an agent cannot
+- Clipier never starts a run from inside a run it started (a guard variable), so an agent cannot
   recursively spawn a crew.
 - Notes that look like credentials are never stored.
 
 What it does not guarantee, and says so in `SECURITY.md`:
 
-- The agents run with your sign-ins and your permissions. Leme asks each CLI for its edit-accepting,
+- The agents run with your sign-ins and your permissions. Clipier asks each CLI for its edit-accepting,
   sandboxed mode where one exists; it does not replace the CLI's own safety.
 - Where there is no sandbox (Windows), the check runs unsandboxed. The interface says so.
 
@@ -365,7 +365,7 @@ count. The rules:
   - plan validation (cycles, overlap, unknown roles), sessions and the briefing, memory filtering;
   - one end-to-end test of a Race and one of a Crew with fake agents.
 - **Not in the default suite:** real agents, benchmarks and the window self-test. Tests against real
-  agents are marked `#[ignore]` and run by hand. The window self-test (`LEME_PIER_SELFTEST=<file>`,
+  agents are marked `#[ignore]` and run by hand. The window self-test (`CLIPIER_SELFTEST=<file>`,
   covering the three languages) runs when the interface changes and before a release, not on every
   commit.
 - A Tauri IPC test checks that commands work and that disallowed APIs are denied.
@@ -399,9 +399,9 @@ the window's shell and commands, the interface, and the window self-test.
 
 ## Risks and open points
 
-- **Name.** A company called Leme (leme.ai) ships an AI product and has a CLI repository for coding
-  agents. The trademark search (INPI and others) is pending and the name is kept in one place so it can
-  change.
+- **Name.** No product, repository, crate, npm or PyPI package called Clipier was found. The trademark
+  search at INPI is pending, and `clipier.com` is held by someone else (the `.dev`, `.app`, `.io`, `.org`,
+  `.ai`, `.net` and `.com.br` names were unregistered when checked).
 - **Terms of use.** The vendors' terms on driving their official CLIs from another program are summarized
   in [docs/VENDOR_TERMS.md](docs/VENDOR_TERMS.md). `agy` is the least certain.
 - **Format drift.** The CLIs change their output. The adapters and their recorded-stream tests are the

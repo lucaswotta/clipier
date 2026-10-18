@@ -126,7 +126,7 @@ mod tests {
 
     impl Fake {
         fn new(name: &str, script: &str) -> Self {
-            let dir = std::env::temp_dir().join(format!("leme-turn-{name}-{}", std::process::id()));
+            let dir = std::env::temp_dir().join(format!("clipier-turn-{name}-{}", std::process::id()));
             let _ = fs::remove_dir_all(&dir);
             fs::create_dir_all(dir.join("bin")).unwrap();
             let path = dir.join("bin/claude");

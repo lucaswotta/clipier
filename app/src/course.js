@@ -7,8 +7,8 @@ import { fleet, loadFleet, modelControl, agentOptions } from "./fleet.js";
 import { pullRequestSlot, mountPullRequests } from "./github.js";
 import { crewActive, crewRun, crewReset, crewOpen, crewPlan, crewPaint, whenCrewChanges } from "./crew.js";
 
-const REPOSITORY_KEY = "leme-pier.repository";
-const MODE_KEY = "leme-pier.course.mode";
+const REPOSITORY_KEY = "clipier.repository";
+const MODE_KEY = "clipier.course.mode";
 const POLL_MS = 800;
 const MAX_BOATS = 4;
 
@@ -96,7 +96,7 @@ async function poll() {
 // ---- the form -------------------------------------------------------------------------------
 
 function defaultBoat() {
-  const agent = fleet.list.find((a) => a.id === stored("leme-pier.chat.agent")) ?? fleet.list[0];
+  const agent = fleet.list.find((a) => a.id === stored("clipier.chat.agent")) ?? fleet.list[0];
   return { agent: agent?.id ?? "", model: "" };
 }
 

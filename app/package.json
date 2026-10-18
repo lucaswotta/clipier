@@ -1,6 +1,6 @@
 {
-  "name": "leme-pier-app",
-  "description": "The Leme Pier window.",
+  "name": "clipier-app",
+  "description": "The Clipier window.",
   "license": "Apache-2.0",
   "private": true,
   "version": "0.0.1",

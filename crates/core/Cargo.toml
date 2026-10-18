@@ -1,6 +1,6 @@
 [package]
-name = "leme-core"
-description = "What Leme Pier does, without a window: agents, conversations, worktrees, races and crews."
+name = "clipier-core"
+description = "What Clipier does, without a window: agents, conversations, worktrees, races and crews."
 version.workspace = true
 edition.workspace = true
 license.workspace = true

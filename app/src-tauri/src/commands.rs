@@ -13,9 +13,9 @@ pub use race::Races;
 use std::path::PathBuf;
 use std::sync::{Mutex, MutexGuard, PoisonError};
 
-use leme_core::agents::{self, Detected};
-use leme_core::store::Layout;
-use leme_core::usage::{Log, Summary};
+use clipier_core::agents::{self, Detected};
+use clipier_core::store::Layout;
+use clipier_core::usage::{Log, Summary};
 
 /// The agents as the last detection found them, so that a crew does not wait four seconds to ask.
 #[derive(Default)]
@@ -60,7 +60,7 @@ pub async fn detect_agents(agents: tauri::State<'_, Agents>) -> Result<Vec<Detec
     Ok(found)
 }
 
-/// What each agent has done through Leme, the busiest first.
+/// What each agent has done through Clipier, the busiest first.
 #[tauri::command]
 pub fn usage_summary() -> Vec<Summary> {
     Log::new(&Layout::standard().usage_file()).summary()

@@ -1,4 +1,4 @@
-//! A conversation that moves between agent CLIs. Leme Pier keeps its own record of what was said
+//! A conversation that moves between agent CLIs. Clipier keeps its own record of what was said
 //! and done, so the agent that takes over reads a short briefing instead of rediscovering the
 //! repository, and goes back to its own native session when it speaks again.
 
@@ -325,7 +325,7 @@ mod tests {
     use super::*;
 
     fn temp(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("leme-pier-session-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("clipier-session-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir
@@ -395,7 +395,7 @@ mod tests {
             &dir,
             r#"prompt=""; while [ $# -gt 0 ]; do [ "$1" = "-p" ] && prompt="$2"; shift; done
 printf '%s\n' '{"type":"system","subtype":"init","session_id":"sess-1"}'
-case "$prompt" in *"Context from Leme Pier"*) seen=briefed;; *) seen=bare;; esac
+case "$prompt" in *"Context from Clipier"*) seen=briefed;; *) seen=bare;; esac
 printf '%s\n' "{\"type\":\"result\",\"session_id\":\"sess-1\",\"is_error\":false,\"result\":\"$seen\\nNOTE: Where | The code is in src.\",\"usage\":{\"input_tokens\":3,\"output_tokens\":4}}""#,
         );
         let store = Store::new(&Layout::new(&dir));

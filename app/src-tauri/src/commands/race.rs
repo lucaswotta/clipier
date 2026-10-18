@@ -4,12 +4,12 @@ use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 
-use leme_core::agents::{Environment, Event};
-use leme_core::check;
-use leme_core::id::run_name;
-use leme_core::platform::sandbox;
-use leme_core::race::{self, BoatSpec, Race, Sail};
-use leme_core::store::Layout;
+use clipier_core::agents::{Environment, Event};
+use clipier_core::check;
+use clipier_core::id::run_name;
+use clipier_core::platform::sandbox;
+use clipier_core::race::{self, BoatSpec, Race, Sail};
+use clipier_core::store::Layout;
 use serde::Serialize;
 use tauri::State;
 

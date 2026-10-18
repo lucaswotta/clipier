@@ -1,4 +1,4 @@
-//! Where things live on disk. Everything Leme writes is under one folder, and every module asks
+//! Where things live on disk. Everything Clipier writes is under one folder, and every module asks
 //! here instead of building its own paths.
 
 use std::path::{Path, PathBuf};
@@ -16,9 +16,9 @@ impl Layout {
         Self { root: root.to_path_buf() }
     }
 
-    /// The user's own folder: `leme-pier` under the platform's data folder.
+    /// The user's own folder: `clipier` under the platform's data folder.
     pub fn standard() -> Self {
-        Self { root: platform::data_dir().join("leme-pier") }
+        Self { root: platform::data_dir().join("clipier") }
     }
 
     pub fn conversations(&self) -> PathBuf {
@@ -43,9 +43,9 @@ impl Layout {
     }
 }
 
-/// The user's own settings folder: `leme-pier` under the platform's config folder.
+/// The user's own settings folder: `clipier` under the platform's config folder.
 pub fn config_folder() -> PathBuf {
-    platform::config_dir().join("leme-pier")
+    platform::config_dir().join("clipier")
 }
 
 /// Where the user's role files live.

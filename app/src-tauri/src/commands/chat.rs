@@ -5,10 +5,10 @@ use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 
-use leme_core::agents::{Environment, Event};
-use leme_core::id::run_name;
-use leme_core::session::{Choice, Entry, Meta, Store};
-use leme_core::store::Layout;
+use clipier_core::agents::{Environment, Event};
+use clipier_core::id::run_name;
+use clipier_core::session::{Choice, Entry, Meta, Store};
+use clipier_core::store::Layout;
 use serde::Serialize;
 use tauri::State;
 

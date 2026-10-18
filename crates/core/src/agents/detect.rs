@@ -296,7 +296,7 @@ mod tests {
     #[cfg(unix)]
     #[test]
     fn a_cli_is_asked_what_it_is_and_one_that_is_missing_is_reported_as_not_installed() {
-        let dir = std::env::temp_dir().join(format!("leme-detect-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("clipier-detect-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
         let script = r#"case "$1" in

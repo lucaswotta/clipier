@@ -165,7 +165,7 @@ pub fn load(layout: &Layout, id: &str) -> Result<Race, String> {
     let bytes = fs::read(folder(layout, id)?.join(STATE)).map_err(|e| format!("no such race: {e}"))?;
     let race: Race = serde_json::from_slice(&bytes).map_err(|e| e.to_string())?;
     if race.version > VERSION {
-        return Err(format!("this race was written by a newer Leme Pier (format {})", race.version));
+        return Err(format!("this race was written by a newer Clipier (format {})", race.version));
     }
     Ok(race)
 }
@@ -411,7 +411,7 @@ pub fn sail(sail: &Sail<'_>, shared: &Arc<Mutex<Race>>) {
         match Check::parse(&check_text) {
             Ok(check) => Some(check),
             Err(error) => {
-                return fail_all(sail.layout, shared, format!("the check is not a command Leme can run: {error}"));
+                return fail_all(sail.layout, shared, format!("the check is not a command Clipier can run: {error}"));
             }
         }
     };
@@ -429,7 +429,7 @@ pub fn sail(sail: &Sail<'_>, shared: &Arc<Mutex<Race>>) {
     let mut trees: Vec<(String, Agent, String, Worktree)> = Vec::new();
     for (boat, agent, model) in boats {
         let dir = sail.layout.worktrees().join(&id).join(&boat);
-        match repo.add_worktree(&dir, &format!("leme/{id}/{boat}"), &before.head) {
+        match repo.add_worktree(&dir, &format!("clipier/{id}/{boat}"), &before.head) {
             Ok(tree) => {
                 trees.push((boat, Agent::from_name(&agent).expect("checked when the race was made"), model, tree));
             }
@@ -485,7 +485,7 @@ mod tests {
     use std::process::Command;
 
     fn folder_of(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("leme-race-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("clipier-race-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir
@@ -606,7 +606,7 @@ printf '%s\n' '{"type":"result","session_id":"s","is_error":false,"result":"Wrot
         sail_it(&layout, &shared, &fake_environment(&dir, WRITES_A_FILE));
         let saved = load(&layout, "fair-kestrel-0004").unwrap();
         assert!(saved.finished && saved.error.is_some());
-        assert_eq!(git(&repository, &["branch", "--list", "leme/*"]), "", "no branch was made");
+        assert_eq!(git(&repository, &["branch", "--list", "clipier/*"]), "", "no branch was made");
         let _ = fs::remove_dir_all(&dir);
     }
 

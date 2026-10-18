@@ -120,7 +120,7 @@ mod tests {
     use super::*;
 
     fn home(name: &str) -> PathBuf {
-        let home = std::env::temp_dir().join(format!("leme-home-{name}-{}", std::process::id()));
+        let home = std::env::temp_dir().join(format!("clipier-home-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&home);
         for dir in [".ssh", ".gemini/config", ".gemini/antigravity-cli", ".config/gh"] {
             std::fs::create_dir_all(home.join(dir)).unwrap();

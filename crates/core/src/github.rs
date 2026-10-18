@@ -1,4 +1,4 @@
-//! The one thing Leme Pier asks of GitHub: to open a pull request from a branch of its own, when the
+//! The one thing Clipier asks of GitHub: to open a pull request from a branch of its own, when the
 //! user clicks for it. Signing in uses GitHub's device flow, which needs no secret in this program.
 //! It makes no other network request, and sends no analytics.
 
@@ -13,7 +13,7 @@ use crate::platform;
 use crate::runner::capture;
 
 const TIMEOUT: Duration = Duration::from_secs(20);
-const USER_AGENT: &str = concat!("leme-pier/", env!("CARGO_PKG_VERSION"));
+const USER_AGENT: &str = concat!("clipier/", env!("CARGO_PKG_VERSION"));
 const API_VERSION: &str = "2022-11-28";
 
 /// Where GitHub is. Tests point it at a server of their own.
@@ -257,12 +257,12 @@ mod tests {
     #[test]
     fn a_github_remote_is_read_in_every_shape_git_writes_it() {
         for url in [
-            "https://github.com/lucaswotta/leme-pier.git",
-            "https://github.com/lucaswotta/leme-pier",
-            "git@github.com:lucaswotta/leme-pier.git",
-            "ssh://git@github.com/lucaswotta/leme-pier.git",
+            "https://github.com/lucaswotta/clipier.git",
+            "https://github.com/lucaswotta/clipier",
+            "git@github.com:lucaswotta/clipier.git",
+            "ssh://git@github.com/lucaswotta/clipier.git",
         ] {
-            assert_eq!(remote_slug(url), Some(("lucaswotta".into(), "leme-pier".into())), "{url}");
+            assert_eq!(remote_slug(url), Some(("lucaswotta".into(), "clipier".into())), "{url}");
         }
         assert_eq!(remote_slug("https://gitlab.com/a/b.git"), None);
         assert_eq!(remote_slug("git@github.com:onlyowner"), None);
@@ -302,13 +302,13 @@ mod tests {
             (201, r#"{"html_url":"https://github.com/o/r/pull/7","number":7}"#),
             (
                 422,
-                r#"{"message":"Validation Failed","errors":[{"message":"A pull request already exists for o:leme/x"}]}"#,
+                r#"{"message":"Validation Failed","errors":[{"message":"A pull request already exists for o:clipier/x"}]}"#,
             ),
             (200, r#"[{"html_url":"https://github.com/o/r/pull/3","number":3}]"#),
             (401, r#"{"message":"Bad credentials"}"#),
         ]);
         let endpoints = endpoints(&address);
-        let opened = open_pull_request(&endpoints, "tok", "o", "r", "leme/x", "main", "Title", "Body").unwrap();
+        let opened = open_pull_request(&endpoints, "tok", "o", "r", "clipier/x", "main", "Title", "Body").unwrap();
         assert_eq!(opened, PullRequest { url: "https://github.com/o/r/pull/7".into(), number: 7 });
         let request = seen.lock().unwrap()[0].clone();
         assert!(
@@ -317,11 +317,11 @@ mod tests {
             "{request}"
         );
         let compact = request.replace([' ', '\n'], "");
-        assert!(compact.contains(r#""head":"leme/x""#) && compact.contains(r#""base":"main""#), "{request}");
+        assert!(compact.contains(r#""head":"clipier/x""#) && compact.contains(r#""base":"main""#), "{request}");
 
-        let again = open_pull_request(&endpoints, "tok", "o", "r", "leme/x", "main", "Title", "Body").unwrap();
+        let again = open_pull_request(&endpoints, "tok", "o", "r", "clipier/x", "main", "Title", "Body").unwrap();
         assert_eq!(again.number, 3);
-        let rejected = open_pull_request(&endpoints, "bad", "o", "r", "leme/x", "main", "T", "B").unwrap_err();
+        let rejected = open_pull_request(&endpoints, "bad", "o", "r", "clipier/x", "main", "T", "B").unwrap_err();
         assert!(rejected.contains("connect again"), "{rejected}");
     }
 
@@ -336,14 +336,14 @@ mod tests {
     }
 
     /// Opens a real pull request with the token of the user's `gh`; run by hand with
-    /// `LEME_PR_REPO=<folder> LEME_PR_BRANCH=<branch> LEME_PR_BASE=main cargo test -p leme-core -- --ignored real_pull_request`.
+    /// `CLIPIER_PR_REPO=<folder> CLIPIER_PR_BRANCH=<branch> CLIPIER_PR_BASE=main cargo test -p clipier-core -- --ignored real_pull_request`.
     #[test]
     #[ignore = "pushes a branch and opens a pull request on GitHub"]
     fn real_pull_request() {
         let (Ok(folder), Ok(branch), Ok(base)) =
-            (std::env::var("LEME_PR_REPO"), std::env::var("LEME_PR_BRANCH"), std::env::var("LEME_PR_BASE"))
+            (std::env::var("CLIPIER_PR_REPO"), std::env::var("CLIPIER_PR_BRANCH"), std::env::var("CLIPIER_PR_BASE"))
         else {
-            panic!("set LEME_PR_REPO, LEME_PR_BRANCH and LEME_PR_BASE");
+            panic!("set CLIPIER_PR_REPO, CLIPIER_PR_BRANCH and CLIPIER_PR_BASE");
         };
         let repo = crate::git::Repo::open(std::path::Path::new(&folder)).unwrap();
         let (owner, name) = remote_slug(&repo.remote_url("origin").unwrap()).unwrap();
@@ -357,7 +357,7 @@ mod tests {
             &branch,
             &base,
             "Self test: please close",
-            "Opened by a test of Leme Pier.",
+            "Opened by a test of Clipier.",
         )
         .unwrap();
         println!("OPENED {}", opened.url);

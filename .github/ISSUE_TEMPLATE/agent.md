@@ -1,6 +1,6 @@
 ---
 name: Support a new agent CLI
-about: A coding CLI Leme Pier does not know yet
+about: A coding CLI Clipier does not know yet
 labels: agent
 ---
 

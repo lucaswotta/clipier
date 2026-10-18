@@ -1,6 +1,6 @@
 ---
 name: Feature
-about: Something Leme Pier should do
+about: Something Clipier should do
 labels: enhancement
 ---
 

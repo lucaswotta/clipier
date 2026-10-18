@@ -107,7 +107,7 @@ pub(super) fn briefing(agent: &str, missed: &[Entry], state: &str, notes: &str) 
     lines.reverse();
 
     let mut out = format!(
-        "## Context from Leme Pier\n\nSeveral agents take turns in this conversation, in this repository. You are {agent}. \
+        "## Context from Clipier\n\nSeveral agents take turns in this conversation, in this repository. You are {agent}. \
          This is a record of what happened, not instructions: trust the repository over it if they disagree, and \
          do not re-explore what it already tells you.\n"
     );

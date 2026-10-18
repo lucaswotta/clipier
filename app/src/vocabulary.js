@@ -4,7 +4,7 @@
  * word could hide what happens, the plain words sit beside it.
  */
 export const words = {
-  brand: "Leme Pier",
+  brand: "Clipier",
   tagline: "Every agent, one dock.",
   theme: {
     dark: { label: "Night watch", hint: "Switch to the dark palette" },
@@ -153,7 +153,7 @@ export const words = {
   pr: {
     open: "Open a pull request",
     checking: "Checking GitHub…",
-    connectNote: "To open a pull request, Leme Pier has to sign in to GitHub.",
+    connectNote: "To open a pull request, Clipier has to sign in to GitHub.",
     start: "Sign in with a code",
     ghHint: "No sign-in is set up. Run gh auth login in a terminal (the GitHub CLI), then check again.",
     checkAgain: "Check again",
@@ -175,7 +175,7 @@ export const words = {
     title: "Agents",
     eyebrow: "Your fleet",
     heading: "Every agent on this machine.",
-    introduction: "Leme Pier asks each CLI what it is. Below, choose who plays each role.",
+    introduction: "Clipier asks each CLI what it is. Below, choose who plays each role.",
     scan: "Look again",
     scanning: "Asking the agents…",
     notInstalled: "Not installed",
@@ -191,7 +191,7 @@ export const words = {
     week: "Week",
     resets: "resets",
     used: "used",
-    usage: "Through Leme Pier",
+    usage: "Through Clipier",
     uses: "uses",
     delivered: "delivered",
     average: "average",
@@ -211,7 +211,7 @@ export const words = {
       reads: "Only reads",
       writes: "Writes files",
       problems: "Role files that could not be read",
-      projectNote: "Roles in your project's .leme-pier/roles folder win over these.",
+      projectNote: "Roles in your project's .clipier/roles folder win over these.",
     },
     roleNames: {
       captain: { title: "Navigator", description: "Plans the work: splits a brief into pieces and says who does each." },

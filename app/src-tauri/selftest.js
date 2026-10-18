@@ -1,5 +1,5 @@
 // Drives the real window with the real backend, then reports through `selftest_report`.
-// Started by `LEME_PIER_SELFTEST=<file> leme`; see src/selftest.rs.
+// Started by `CLIPIER_SELFTEST=<file> clipier`; see src/selftest.rs.
 (async () => {
   const passed = [];
   const failed = [];
@@ -41,7 +41,7 @@
     await speak(["en-US"]);
     const labels = [...document.querySelectorAll("#menu .item")].map((b) => b.textContent.trim());
     check("the menu names the three screens", ["Chat", "Set course", "Agents"].every((l, i) => labels[i].startsWith(l)), labels.join(" | "));
-    check("the brand is Leme Pier", document.querySelector(".brand")?.textContent.includes("Leme Pier"));
+    check("the brand is Clipier", document.querySelector(".brand")?.textContent.includes("Clipier"));
 
     // Agents: asked of the real CLIs.
     menu(2).click();
@@ -127,7 +127,7 @@
       if (approve) {
         document.getElementById("approve").click();
         const back = await waitFor(() => document.querySelector(".finish"), 900000);
-        check("the crew comes back and the branch holds its work", !!back && /leme\/[a-z]+-[a-z]+-[0-9a-f]{4}\/integration/.test(text()), text().slice(0, 400));
+        check("the crew comes back and the branch holds its work", !!back && /clipier\/[a-z]+-[a-z]+-[0-9a-f]{4}\/integration/.test(text()), text().slice(0, 400));
         check("every piece reached the branch", document.querySelectorAll(".boat.piece-merged").length === document.querySelectorAll(".boats .boat").length, document.querySelector(".boats")?.innerText.slice(0, 300));
       }
     }

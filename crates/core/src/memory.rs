@@ -1,7 +1,7 @@
 //! What agents learn about a project and the next ones should not have to find out again.
 //!
 //! An agent may end a reply with a few lasting facts (a command, a convention, where
-//! something lives). Leme Pier curates them: they are cut to size, refused if they look like a
+//! something lives). Clipier curates them: they are cut to size, refused if they look like a
 //! secret, merged when they repeat, and kept as plain markdown files per repository. Every later
 //! conversation and piece starts with them, which costs a few hundred tokens instead of a search.
 
@@ -195,7 +195,7 @@ mod tests {
     use super::*;
 
     fn memory(name: &str) -> Memory {
-        let root = std::env::temp_dir().join(format!("leme-pier-memory-{name}-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("clipier-memory-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&root);
         Memory::open(&root, Path::new("/some/project"))
     }
@@ -284,7 +284,7 @@ mod tests {
 
     #[test]
     fn each_repository_has_its_own_memory() {
-        let root = std::env::temp_dir().join(format!("leme-pier-memory-two-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("clipier-memory-two-{}", std::process::id()));
         let _ = fs::remove_dir_all(&root);
         Memory::open(&root, Path::new("/a/project")).propose(&[note("T", "t")], "r");
         assert_eq!(Memory::open(&root, Path::new("/b/project")).notes(), Vec::new());

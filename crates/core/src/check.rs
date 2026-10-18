@@ -1,4 +1,4 @@
-//! The project's own checks (its tests), run by Leme Pier on what an agent wrote.
+//! The project's own checks (its tests), run by Clipier on what an agent wrote.
 //!
 //! A check costs no tokens and settles what a reviewer can only guess at: a read-only reviewer
 //! cannot run the tests, and a builder's own report that they passed is a claim. Failing a check
@@ -277,7 +277,7 @@ mod tests {
     use std::path::PathBuf;
 
     fn temp(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("leme-checks-{name}-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("clipier-checks-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir
@@ -458,8 +458,8 @@ mod tests {
     #[test]
     fn credentials_in_the_environment_never_reach_a_check() {
         // SAFETY: no other test of this module reads or writes this variable.
-        unsafe { std::env::set_var("LEME_PIER_TEST_API_KEY", "secret-value") };
-        let result = quick(&argv(&["sh", "-c", "echo [$LEME_PIER_TEST_API_KEY]"]), &temp("env"));
+        unsafe { std::env::set_var("CLIPIER_TEST_API_KEY", "secret-value") };
+        let result = quick(&argv(&["sh", "-c", "echo [$CLIPIER_TEST_API_KEY]"]), &temp("env"));
         assert_eq!(result.output, "[]");
     }
 

@@ -24,7 +24,7 @@ function overwrite(target, source) {
   }
 }
 
-/** The first of the system's languages that Leme Pier speaks, else English. */
+/** The first of the system's languages that Clipier speaks, else English. */
 export function systemLanguage() {
   for (const tag of navigator.languages?.length ? navigator.languages : [navigator.language ?? "en"]) {
     const language = String(tag).toLowerCase();

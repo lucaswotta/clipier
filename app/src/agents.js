@@ -5,7 +5,7 @@ import { escapeHtml } from "./text.js";
 import { words } from "./vocabulary.js";
 import { fleet, modelControl } from "./fleet.js";
 
-const REPOSITORY_KEY = "leme-pier.repository";
+const REPOSITORY_KEY = "clipier.repository";
 const NAMES = { claude: "Claude Code", codex: "Codex", agy: "Antigravity", opencode: "OpenCode" };
 const VISIBLE_MODELS = 5;
 

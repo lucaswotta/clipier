@@ -1,4 +1,4 @@
-//! The Leme Pier window. Every command is a thin wrapper over `leme-core`; if one grows logic, the
+//! The Clipier window. Every command is a thin wrapper over `clipier-core`; if one grows logic, the
 //! logic belongs in the core.
 // Tauri hands a command its arguments by value, after deserializing them from the interface.
 #![allow(clippy::needless_pass_by_value)]
@@ -52,11 +52,11 @@ fn main() {
             commands::roles::note_forget,
         ])
         .run(tauri::generate_context!())
-        .expect("failed to start Leme Pier");
+        .expect("failed to start Clipier");
 }
 
 /// Drives the real command handler and the real capability files through Tauri's mock runtime, so
-/// that a permission or security change that stops the interface from calling Leme is caught here.
+/// that a permission or security change that stops the interface from calling Clipier is caught here.
 #[cfg(test)]
 mod tests {
     use tauri::ipc::{CallbackFn, InvokeBody, InvokeResponseBody};
