@@ -359,15 +359,28 @@ Front-end modules: `chat`, `course` (form, race view), `crew` (plan, run), `agen
 
 ## Testing
 
-- `core` is tested without a window. Agents are faked by small shell scripts that print a recorded
-  stream, so the parsers, the runner, sessions, the race and the crew are tested with no model call.
-- One test per adapter against a recorded output of the real CLI.
+Tests exist to catch what would hurt a user. They are not a measure of effort, and there is no target
+count. The rules:
+
+- **A test names a behavior.** "A quota that resets in hours makes the agent unusable" is a test.
+  A test that restates the code, checks a getter or exists to raise a number is deleted.
+- **Fast by construction.** The whole default suite runs in under 30 seconds. A test that needs more
+  time does not belong in it. `scripts/verify.sh quick` (format, clippy, the tests of the crate being
+  changed) is what runs while working; the full `verify.sh` runs in CI.
+- **What is tested, and how:**
+  - the four output parsers and the model and usage detection, each against a recorded output of the
+    real CLI;
+  - the runner (limits, cancel, process tree) with tiny shell scripts as fake agents;
+  - git operations (worktrees, commit, merge, scope, conflict) in a temporary repository;
+  - plan validation (cycles, overlap, unknown roles), sessions and the briefing, memory filtering;
+  - one end-to-end test of a Race and one of a Crew with fake agents.
+- **Not in the default suite:** real agents, benchmarks and the window self-test. Tests against real
+  agents are marked `#[ignore]` and run by hand. The window self-test (`LEME_PIER_SELFTEST=<file>`,
+  covering the three languages) runs when the interface changes and before a release, not on every
+  commit.
 - A Tauri IPC test checks that commands work and that disallowed APIs are denied.
-- A window self-test drives the real webview (`LEME_PIER_SELFTEST=<file>`), including the three languages.
-- `scripts/verify.sh` is what CI runs: `cargo fmt --check`, `clippy -D warnings` (pedantic), tests,
-  front-end build.
-- No benchmark ships in the repository in 0.0.1. Measuring whether a briefing saves tokens comes
-  after the app is usable, and its method and results go to `docs/`.
+- No benchmark ships in 0.0.1. Whether a briefing saves tokens is measured after the app is usable;
+  the method and the results go to `docs/`.
 
 ## Release and project
 

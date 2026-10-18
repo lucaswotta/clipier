@@ -9,3 +9,5 @@ Status: design phase, nothing to install yet. The plan is in [ARCHITECTURE.md](A
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).
+
+[Versão em português](README.pt-BR.md)
