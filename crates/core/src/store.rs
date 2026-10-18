@@ -42,3 +42,13 @@ impl Layout {
         self.root.join("usage.jsonl")
     }
 }
+
+/// The user's own settings folder: `leme-pier` under the platform's config folder.
+pub fn config_folder() -> PathBuf {
+    platform::config_dir().join("leme-pier")
+}
+
+/// Where the user's role files live.
+pub fn user_roles() -> PathBuf {
+    config_folder().join("roles")
+}

@@ -17,7 +17,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 
-use crate::agents::{Detected, Environment, Mode, Profile, Request, Session, take_turn};
+use crate::agents::{Agent, Detected, Environment, Event, Mode, Profile, Request, Session, Transcript, take_turn};
 use crate::check::Check;
 use crate::git::{Merge, Repo, Snapshot, Worktree};
 use crate::memory::Memory;
@@ -154,6 +154,20 @@ pub fn list(layout: &Layout) -> Vec<Crew> {
         entries.flatten().filter_map(|entry| load(layout, &entry.file_name().to_string_lossy()).ok()).collect();
     found.sort_by_key(|crew| std::cmp::Reverse(crew.started_ms));
     found
+}
+
+/// What a piece's agent has printed so far, from its latest turn.
+pub fn progress(layout: &Layout, crew: &str, piece: &PieceState) -> Vec<Event> {
+    let Some(agent) = Agent::from_name(&piece.agent) else { return Vec::new() };
+    let Ok(dir) = folder(layout, crew) else { return Vec::new() };
+    let out = dir.join("out");
+    // The turn after a failed check is written next to the first, with `-fix` added.
+    let label = format!("{}-{}", piece.piece.id, piece.attempts);
+    let bytes = fs::read(out.join(format!("{label}-fix.out"))).or_else(|_| fs::read(out.join(format!("{label}.out"))));
+    let Ok(bytes) = bytes else { return Vec::new() };
+    let mut transcript = Transcript::new(agent);
+    transcript.feed(&bytes);
+    transcript.events().iter().map(|event| event.truncated(2_000)).collect()
 }
 
 /// What the machine and the project give a crew to work with.

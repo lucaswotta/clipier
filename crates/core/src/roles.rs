@@ -41,7 +41,7 @@ pub struct Role {
 }
 
 /// Who a role goes to on this machine.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Assignment {
     pub agent: Agent,
     pub model: String,

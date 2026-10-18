@@ -5,7 +5,37 @@ mod commands;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![commands::detect_agents, commands::usage_summary])
+        .manage(commands::Agents::default())
+        .manage(commands::Chats::default())
+        .manage(commands::Races::default())
+        .manage(commands::Crews::default())
+        .invoke_handler(tauri::generate_handler![
+            commands::detect_agents,
+            commands::usage_summary,
+            commands::chat::chat_list,
+            commands::chat::chat_create,
+            commands::chat::chat_view,
+            commands::chat::chat_send,
+            commands::chat::chat_cancel,
+            commands::race::race_check,
+            commands::race::race_improve,
+            commands::race::race_start,
+            commands::race::race_list,
+            commands::race::race_view,
+            commands::race::race_diff,
+            commands::race::race_cancel,
+            commands::crew::crew_plan,
+            commands::crew::crew_stop_planning,
+            commands::crew::crew_start,
+            commands::crew::crew_list,
+            commands::crew::crew_view,
+            commands::crew::crew_command,
+            commands::roles::roles_list,
+            commands::roles::role_save,
+            commands::roles::project_settings,
+            commands::roles::notes_list,
+            commands::roles::note_forget,
+        ])
         .run(tauri::generate_context!())
         .expect("failed to start Leme Pier");
 }
