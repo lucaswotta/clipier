@@ -8,4 +8,6 @@ pub mod memory;
 pub mod platform;
 pub mod runner;
 pub mod scope;
+pub mod session;
+pub mod store;
 pub mod usage;
