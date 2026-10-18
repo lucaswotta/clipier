@@ -32,6 +32,12 @@ pub fn start(command: &mut Command) -> std::io::Result<Child> {
     os::start(command)
 }
 
+/// Makes a file readable by its owner only, for a secret such as a token. Windows keeps a user's
+/// profile folder private already, so there it does nothing.
+pub fn keep_private(path: &Path) -> std::io::Result<()> {
+    os::keep_private(path)
+}
+
 /// Where the user's home is.
 pub fn home_dir() -> PathBuf {
     os::home_dir()
@@ -74,5 +80,15 @@ mod tests {
         let found = find_program("sh", &[PathBuf::from("/nonexistent-folder"), PathBuf::from("/bin")]);
         assert_eq!(found, Some(PathBuf::from("/bin/sh")));
         assert_eq!(find_program("no-such-program-here", &[PathBuf::from("/bin")]), None);
+    }
+
+    #[test]
+    fn a_secret_file_is_readable_by_its_owner_only() {
+        use std::os::unix::fs::PermissionsExt;
+        let file = std::env::temp_dir().join(format!("leme-private-{}", std::process::id()));
+        std::fs::write(&file, "token").unwrap();
+        keep_private(&file).unwrap();
+        assert_eq!(std::fs::metadata(&file).unwrap().permissions().mode() & 0o777, 0o600);
+        let _ = std::fs::remove_file(&file);
     }
 }

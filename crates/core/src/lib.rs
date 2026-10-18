@@ -5,6 +5,8 @@ pub mod check;
 pub mod config;
 pub mod crew;
 pub mod git;
+#[cfg(feature = "github")]
+pub mod github;
 pub mod id;
 pub mod memory;
 pub mod plan;

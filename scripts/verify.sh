@@ -15,9 +15,9 @@ mode="${1:-full}"
 cargo fmt --all --check
 cargo clippy --workspace --all-targets -- -D warnings
 # Windows code is only compiled on Windows, so lint the core for it here when its target is installed
-# (`rustup target add x86_64-pc-windows-gnu`). The window's crate needs a Windows toolchain: only CI builds it.
+# (`rustup target add x86_64-pc-windows-gnu`). The window's crate and the TLS stack need a Windows toolchain: only CI builds them.
 if rustup target list --installed 2>/dev/null | grep -q '^x86_64-pc-windows-gnu$'; then
-  cargo clippy -p leme-core --all-targets --target x86_64-pc-windows-gnu -- -D warnings
+  cargo clippy -p leme-core --no-default-features --all-targets --target x86_64-pc-windows-gnu -- -D warnings
 fi
 
 case "$mode" in

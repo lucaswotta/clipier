@@ -56,3 +56,7 @@ pub fn runnable(folder: &Path, name: &str) -> Option<PathBuf> {
     let mode = std::fs::metadata(&path).ok().filter(std::fs::Metadata::is_file)?.permissions().mode();
     (mode & 0o111 != 0).then_some(path)
 }
+
+pub fn keep_private(path: &Path) -> std::io::Result<()> {
+    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o600))
+}

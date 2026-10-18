@@ -49,3 +49,8 @@ pub fn runnable(folder: &Path, name: &str) -> Option<PathBuf> {
     }
     EXTENSIONS.iter().map(|extension| folder.join(format!("{name}.{extension}"))).find(|path| path.is_file())
 }
+
+#[allow(clippy::unnecessary_wraps, reason = "the same signature as the Unix one")]
+pub fn keep_private(_path: &Path) -> std::io::Result<()> {
+    Ok(())
+}
