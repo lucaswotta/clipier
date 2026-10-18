@@ -2,6 +2,7 @@
 //! the app, in the user's folder, or in the project's `.leme-pier/roles/`. A file with the same
 //! name overrides the one before it (project over user over built-in).
 
+use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
 
@@ -145,6 +146,28 @@ pub fn parse(text: &str, source: Source) -> Result<Role, String> {
     })
 }
 
+impl Role {
+    /// The role as a file: what [`parse`] reads back.
+    pub fn to_markdown(&self) -> String {
+        let mode = if self.mode == Mode::Write { "write" } else { "read" };
+        let mut text = format!(
+            "---\nname: {}\ntitle: {}\nmode: {mode}\nagent: {}\nmodel: \"{}\"\n",
+            self.name, self.title, self.agent, self.model
+        );
+        if let Some(fallback) = &self.fallback {
+            let _ = writeln!(text, "fallback:\n  agent: {}\n  model: \"{}\"", fallback.agent, fallback.model);
+        }
+        let _ = writeln!(text, "---\n{}", self.prompt);
+        text
+    }
+}
+
+/// Writes a role into `folder` as `<name>.md`, replacing the file that was there.
+pub fn save(folder: &Path, role: &Role) -> std::io::Result<()> {
+    fs::create_dir_all(folder)?;
+    fs::write(folder.join(format!("{}.md", role.name)), role.to_markdown())
+}
+
 fn builtin(name: &str, title: &str, mode: Mode, prompt: &str) -> Role {
     Role {
         name: name.into(),
@@ -251,6 +274,14 @@ mod tests {
         assert_eq!((role.agent.as_str(), role.model.as_str()), ("codex", ""));
         assert_eq!(role.fallback, Some(Fallback { agent: "claude".into(), model: "sonnet".into() }));
         assert_eq!(role.prompt, "You implement the piece.");
+    }
+
+    #[test]
+    fn a_role_written_to_a_file_reads_back_the_same() {
+        let role = parse(BUILDER, Source::User).unwrap();
+        assert_eq!(parse(&role.to_markdown(), Source::User).unwrap(), role);
+        let plain = Role { fallback: None, agent: String::new(), ..role };
+        assert_eq!(parse(&plain.to_markdown(), Source::User).unwrap(), plain);
     }
 
     #[test]
