@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Leme Pier</title>
+  </head>
+  <body>
+    <div id="app">
+      <aside id="sidebar">
+        <div class="brand">
+          <button class="brand-mark" id="mark" type="button">
+          <svg class="mark" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v7" /><path d="M12 3h5l-2.5 2.5L17 8h-5" /><path d="M3 12h18" /><path d="M6 12v7M12 12v7M18 12v7" /><path d="M3 21.5c3-1.4 6-1.4 9 0s6 1.4 9 0" />
+          </svg></button><span><span id="brand-name"></span><small id="brand-tagline"></small></span></div>
+        <div class="section-label" id="workspace-label"></div>
+        <nav id="menu"></nav>
+        <details class="voyages" open>
+          <summary class="section-label voyage-label"><span id="voyages-label"></span> <span id="voyage-count">0</span></summary>
+          <nav id="orchestration-list"></nav>
+        </details>
+        <footer class="sidebar-footer"><span class="workspace-mark">L</span><span class="workspace-label"><span id="workspace-name"></span><small id="workspace-note"></small></span><button class="icon-btn" id="theme-toggle" type="button"></button></footer>
+      </aside>
+      <main id="main">
+        <header id="topbar"></header>
+        <div id="content"></div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

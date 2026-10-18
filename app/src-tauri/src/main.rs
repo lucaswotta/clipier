@@ -30,6 +30,7 @@ fn main() {
             commands::crew::crew_list,
             commands::crew::crew_view,
             commands::crew::crew_command,
+            commands::crew::crew_diff,
             commands::roles::roles_list,
             commands::roles::role_save,
             commands::roles::project_settings,

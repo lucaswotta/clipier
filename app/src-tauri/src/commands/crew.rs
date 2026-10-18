@@ -11,6 +11,7 @@ use leme_core::agents::{Environment, Event};
 use leme_core::check::{self, Check};
 use leme_core::config;
 use leme_core::crew::{self, Command, Crew, PieceState, Setup};
+use leme_core::git::Repo;
 use leme_core::id::{run_name, uuid};
 use leme_core::memory::{Memory, Stored};
 use leme_core::plan::{Piece, Plan};
@@ -290,4 +291,12 @@ pub fn crew_command(crews: State<'_, Crews>, id: String, command: UserCommand) -
         UserCommand::Stop => Command::Stop,
     };
     running.commands.send(command).map_err(|_| "this crew has finished".to_owned())
+}
+
+/// Everything the crew merged, against where it started, cut to a size the screen can show.
+#[tauri::command]
+pub fn crew_diff(id: String) -> Result<String, String> {
+    let crew = crew::load(&Layout::standard(), &id)?;
+    let repo = Repo::open(Path::new(&crew.repository)).map_err(|e| e.to_string())?;
+    repo.diff(&crew.base, &crew.integration, 120_000).map_err(|e| e.to_string())
 }

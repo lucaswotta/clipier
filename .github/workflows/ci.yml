@@ -31,6 +31,20 @@ jobs:
             build-essential libwebkit2gtk-4.1-dev librsvg2-dev libxdo-dev libssl-dev pkg-config patchelf \
             bubblewrap git
 
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Build the interface
+        run: |
+          npm ci
+          npm run check
+          npm run build
+        working-directory: app
+        shell: bash
+
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt

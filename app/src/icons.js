@@ -1,0 +1,30 @@
+const strokes = (body, size = 16) =>
+  `<svg class="icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
+
+export const icons = {
+  done: (s) => strokes('<circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>', s),
+  failed: (s) => strokes('<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/>', s),
+  running: (s) => strokes('<path d="M21 12a9 9 0 1 1-6.2-8.55"/>', s),
+  chat: (s) => strokes('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.3A8 8 0 1 1 21 12z"/>', s),
+  now: (s) => strokes('<path d="M13 3 5 14h6l-1 7 8-11h-6z"/>', s),
+  history: (s) => strokes('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', s),
+  orchestration: (s) => strokes('<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 11 15.5 7M8.5 13l7 4"/>', s),
+  settings: (s) => strokes('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>', s),
+  refresh: (s) => strokes('<path d="M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5"/>', s),
+  scout: (s) => strokes('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', s),
+  review: (s) => strokes('<path d="M9 11l2 2 4-4"/><rect x="4" y="3" width="16" height="18" rx="3"/>', s),
+  audit: (s) => strokes('<path d="M12 3 4.5 6v5.5c0 4.5 3.1 8 7.5 9.5 4.4-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>', s),
+  build: (s) => strokes('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>', s),
+  plan: (s) => strokes('<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>', s),
+  test: (s) => strokes('<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/>', s),
+  library: (s) => strokes('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7"/>', s),
+  scribe: (s) => strokes('<path d="M4 20c3-1 5-3 7-6l7-9 2 2-9 7c-3 2-5 4-6 6z"/><path d="M14 9l1 1"/>', s),
+  edit: (s) => strokes('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', s),
+  up: (s) => strokes('<path d="m6 14 6-6 6 6"/>', s),
+  down: (s) => strokes('<path d="m6 10 6 6 6-6"/>', s),
+  trash: (s) => strokes('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', s),
+  plus: (s) => strokes('<path d="M12 5v14M5 12h14"/>', s),
+  close: (s) => strokes('<path d="m6 6 12 12M18 6 6 18"/>', s),
+  moon: (s) => strokes('<path d="M20.4 14.6A8.5 8.5 0 0 1 9.4 3.6a8.5 8.5 0 1 0 11 11z"/>', s),
+  sun: (s) => strokes('<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/>', s),
+};
