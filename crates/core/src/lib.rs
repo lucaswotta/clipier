@@ -7,6 +7,7 @@ pub mod id;
 pub mod memory;
 pub mod plan;
 pub mod platform;
+pub mod race;
 pub mod roles;
 pub mod runner;
 pub mod scope;

@@ -12,7 +12,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use serde::{Deserialize, Serialize};
 
 mod briefing;
-pub(crate) use briefing::take_notes;
+pub(crate) use briefing::{NOTE_PREFIX, take_notes};
 use briefing::{briefing, listed, repository_state};
 
 use crate::agents::{Agent, Environment, Event, Mode, Profile, Request, Session, Transcript, Turn, take_turn};

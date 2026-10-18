@@ -17,6 +17,33 @@ pub fn uuid() -> String {
     )
 }
 
+const WINDS: [&str; 12] =
+    ["steady", "fair", "brisk", "gentle", "bold", "swift", "quiet", "silver", "northern", "salty", "bright", "lucky"];
+const SHIPS: [&str; 12] = [
+    "albatross",
+    "heron",
+    "kestrel",
+    "petrel",
+    "tern",
+    "gull",
+    "osprey",
+    "dolphin",
+    "kraken",
+    "clipper",
+    "sloop",
+    "brig",
+];
+
+/// A name for a run, like `fair-albatross-3f2a`. It becomes part of a branch name and of a folder.
+pub fn run_name() -> String {
+    let id = uuid();
+    let pick = |from: &[&'static str], at: usize| {
+        let byte = u8::from_str_radix(&id[at..at + 2], 16).unwrap_or(0);
+        from[usize::from(byte) % from.len()]
+    };
+    format!("{}-{}-{}", pick(&WINDS, 0), pick(&SHIPS, 2), &id[4..8])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -29,5 +56,13 @@ mod tests {
         assert_eq!(parts.iter().map(|p| p.len()).collect::<Vec<_>>(), [8, 4, 4, 4, 12]);
         assert!(parts[2].starts_with('4') && matches!(parts[3].chars().next(), Some('8' | '9' | 'a' | 'b')));
         assert!(a.chars().all(|c| c == '-' || c.is_ascii_hexdigit()));
+    }
+
+    #[test]
+    fn a_run_name_is_a_valid_part_of_a_branch_name_and_is_not_repeated() {
+        let (a, b) = (run_name(), run_name());
+        assert_ne!(a, b);
+        assert!(a.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-'), "{a}");
+        assert_eq!(a.split('-').count(), 3);
     }
 }
