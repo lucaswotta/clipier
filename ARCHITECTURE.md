@@ -402,8 +402,8 @@ the window's shell and commands, the interface, and the window self-test.
 - **Name.** A company called Leme (leme.ai) ships an AI product and has a CLI repository for coding
   agents. The trademark search (INPI and others) is pending and the name is kept in one place so it can
   change.
-- **Terms of use.** The agent vendors' terms on driving their official CLIs from another program must
-  be read before the repository is announced.
+- **Terms of use.** The vendors' terms on driving their official CLIs from another program are summarized
+  in [docs/VENDOR_TERMS.md](docs/VENDOR_TERMS.md). `agy` is the least certain.
 - **Format drift.** The CLIs change their output. The adapters and their recorded-stream tests are the
   defense; a breakage is a one-file fix.
 - **Promise to prove.** That a briefing makes the next agent cheaper than starting cold is an

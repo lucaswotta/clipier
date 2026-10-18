@@ -140,6 +140,8 @@ No accounts, no telemetry, no model API keys, no plugins, no background runs. Th
 
 Early: the first release is 0.0.1. [ARCHITECTURE.md](ARCHITECTURE.md) says how it is built and why it is small on purpose (about 5,100 lines of Rust). Whether the briefing really makes the next agent cheaper than starting cold is an assumption with one data point so far; it will be measured and the result published either way.
 
+The agents run under your own sign-ins and your own allowance. What each vendor's terms say about driving their CLIs from another program is in [docs/VENDOR_TERMS.md](docs/VENDOR_TERMS.md).
+
 If Leme Pier saves you time, a star helps other people find it. Issues and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). To add another agent CLI, start with the [issue template](.github/ISSUE_TEMPLATE/agent.md).
 
 ## License

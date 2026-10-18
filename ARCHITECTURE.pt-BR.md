@@ -313,7 +313,7 @@ Cada commit compila e passa no `scripts/verify.sh` sozinho, no Linux e no Window
 ## Riscos e pontos em aberto
 
 - **Nome.** Uma empresa chamada Leme (leme.ai) lança um produto de IA e tem um repositório de CLI para agentes de código. A consulta de marca (INPI e outras) está pendente, e o nome fica num só lugar para poder mudar.
-- **Termos de uso.** Os termos dos fornecedores de agentes sobre dirigir os CLIs oficiais por outro programa precisam ser lidos antes de anunciar o repositório.
+- **Termos de uso.** Os termos dos fornecedores sobre dirigir os CLIs oficiais por outro programa estão resumidos em [docs/VENDOR_TERMS.md](docs/VENDOR_TERMS.md) (em inglês). O `agy` é o mais incerto.
 - **Deriva de formato.** Os CLIs mudam a saída. Os adaptadores e seus testes com saída gravada são a defesa; uma quebra é um conserto de um arquivo.
 - **A promessa a provar.** Que um briefing deixa o próximo agente mais barato que começar do zero é uma suposição com um único dado. É medida depois da 0.0.1 e reportada nos dois casos.
 - **Windows.** O `agy` e alguns CLIs podem não rodar lá; só se saberá testando.

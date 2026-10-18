@@ -142,6 +142,8 @@ Sem contas, sem telemetria, sem chaves de API de modelo, sem plugins, sem execu�
 
 Inicial: a primeira versão é a 0.0.1. O [ARCHITECTURE.pt-BR.md](ARCHITECTURE.pt-BR.md) diz como ele é construído e por que é pequeno de propósito (cerca de 5.100 linhas de Rust). Se o briefing realmente deixa o próximo agente mais barato que começar do zero é uma suposição com um único dado até agora; será medido e o resultado publicado nos dois casos.
 
+Os agentes rodam com os seus próprios logins e a sua própria cota. O que os termos de cada fornecedor dizem sobre dirigir os CLIs por outro programa está em [docs/VENDOR_TERMS.md](docs/VENDOR_TERMS.md) (em inglês).
+
 Se o Leme Pier economizar o seu tempo, uma estrela ajuda outras pessoas a encontrá-lo. Issues e pull requests são bem-vindos: veja o [CONTRIBUTING.md](CONTRIBUTING.md). Para incluir outro CLI de agente, comece pelo [modelo de issue](.github/ISSUE_TEMPLATE/agent.md).
 
 ## Licença
