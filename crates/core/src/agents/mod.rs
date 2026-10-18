@@ -8,7 +8,10 @@
 mod agy;
 mod claude;
 mod codex;
+mod command;
 mod opencode;
+
+pub use command::{Environment, Mode, Prepared, Profile, Request, Session, Unavailable, build};
 
 use std::collections::HashMap;
 
@@ -31,6 +34,15 @@ impl Agent {
             "agy" => Some(Self::Agy),
             "opencode" => Some(Self::Opencode),
             _ => None,
+        }
+    }
+
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Claude => "claude",
+            Self::Codex => "codex",
+            Self::Agy => "agy",
+            Self::Opencode => "opencode",
         }
     }
 }

@@ -4,6 +4,8 @@
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
 
+pub mod sandbox;
+
 #[cfg(unix)]
 mod unix;
 #[cfg(unix)]
