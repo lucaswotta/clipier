@@ -1,6 +1,6 @@
 # Leme Pier: architecture
 
-Status: proposal for 0.0.1, to be approved before any code is written.
+Status: describes what 0.0.1 is. Where the code and this file disagree, the code is right and this file is a bug.
 
 ## What it is
 
@@ -64,59 +64,49 @@ The interface is nautical; the code uses the plain term and the interface maps i
 leme-pier/
   Cargo.toml                 workspace
   crates/
-    core/                    everything that is not a window (library, fully testable)
+    core/                    everything that is not a window (library, testable without one)
       src/
-        platform/            the only place that knows Linux from Windows
-        agents/              one adapter per CLI + detection
-        runner.rs            starts a process, watches it, stops it
-        usage.rs             what each agent has done (Leme's own log)
+        platform/            the only place that knows Linux from Windows (+ the bubblewrap arguments)
+        agents/              one file per CLI (command line, output, detection) + a turn with an agent
+        runner/              starts a process, watches it, stops it; classifies why it failed
         session/             conversations and the briefing
-        memory.rs            project notes
-        git.rs               worktrees, commits, merges, diffs, scope
-        check.rs             find and run a project's check
-        roles.rs             role files: built-in, user, project
-        plan.rs              the plan format and its validation
-        race.rs              the Race
-        crew.rs              the Crew
-        store.rs             where things live on disk
+        crew/                the plan carried out; piece/ is one piece's work
+        race.rs  plan.rs  roles.rs  config.rs
+        git.rs  check.rs  scope.rs  memory.rs  usage.rs  store.rs  id.rs
   app/
-    src-tauri/               Tauri shell: commands only, no logic
-    web/                     front-end: vanilla JS modules, no framework
-  docs/                      ARCHITECTURE, SECURITY, CONTRIBUTING, ROADMAP
-  scripts/verify.sh          fmt, clippy -D warnings, tests, front-end build
+    src-tauri/               Tauri shell: commands only, no logic; the window self-test
+    src/                     interface: vanilla JS modules, one catalog per language, one stylesheet
+    index.html  package.json  vite.config.js  scripts/check-locales.mjs
+  docs/                      ROADMAP and notes
+  scripts/verify.sh          fmt, clippy -D warnings, tests (and a Windows lint when its target is installed)
 ```
 
 `core` has no dependency on Tauri. The shell turns each public function of `core` into a command and
 nothing more; if the shell grows logic, the logic moves to `core`.
 
-### Size budget (Rust, tests excluded)
+### Size (Rust, without tests and comments)
 
-| Module | Lines |
+| Part | Lines |
 |---|---|
-| `agents` (4 adapters, stream parsing, detection) | 1,300 |
-| `runner`, `platform` | 450 |
-| `session`, `memory`, `usage` | 700 |
-| `git`, `check` | 650 |
-| `roles`, `plan` | 400 |
-| `race`, `crew` | 700 |
-| `store` and glue | 200 |
-| `app/src-tauri` | 500 |
-| **Total** | **about 4,900** |
+| `agents` (four CLIs, output, commands, detection, a turn) | 900 |
+| `crew` | 870 |
+| `race`, `plan`, `roles`, `config` | 820 |
+| `session`, `memory`, `usage`, `store`, `id` | 730 |
+| `git`, `check`, `scope` | 510 |
+| `runner`, `platform` | 480 |
+| `app/src-tauri` (commands, shell, self-test) | 780 |
+| **Total** | **about 5,100** |
 
-For comparison, the prototype is 13,600 lines. It stays as a private archive.
+The interface is about 2,500 lines of JavaScript, catalogs and CSS. For comparison, the prototype had
+13,600 lines of Rust. It stays as a private archive.
 
 ## Core modules
 
 ### `agents`
 
-```text
-trait Agent {
-    fn id(&self) -> &'static str;
-    fn detect(&self) -> Detected;                       // installed, version, signed in, models
-    fn command(&self, request: &Request) -> Spawn;      // program, args, env, cwd
-    fn parse(&self, line: &str, into: &mut Transcript); // one line of the CLI's output
-}
-```
+Each CLI is one file with the same three things, chosen by an `Agent` enum: how to build its command
+line from a `Request`, how to read one line of its output into a `Transcript`, and how to ask it what it
+is (`detect`).
 
 Detection asks each CLI itself, without a model call, and was checked by hand against the four CLIs on
 the author's machine:
@@ -400,26 +390,12 @@ count. The rules:
 | `bench`, `headless run`, `gc`, `voyages` CLI | Dropped; a CLI can come later over `core` |
 | Review chains across model families | Kept as the `reviewer` role, chosen by the user |
 
-## Commit plan
+## How the history reads
 
-Each commit builds and passes `scripts/verify.sh` on its own.
-
-1. Workspace, license, CI, `verify.sh`, README stub.
-2. `platform` and `runner`.
-3. `agents`: trait, `Transcript`, the four adapters and detection, with recorded streams.
-4. `git` and `check`.
-5. `memory` and `usage`.
-6. `session`: conversations and the briefing.
-7. `roles` and `plan`.
-8. `race`.
-9. `crew`.
-10. The Tauri shell and its commands, with the IPC test.
-11. Front-end base: layout, theme, i18n (three catalogs), the agent list.
-12. Chat screen.
-13. Set course: form and Race.
-14. Set course: Crew.
-15. Agents screen and role pickers.
-16. Window self-test, packaging (`.deb`, AppImage), docs, `0.0.1`.
+Each commit builds and passes `scripts/verify.sh` on its own, on Linux and on Windows: the workspace
+and CI, the platform layer and the runner, what each CLI prints, the command lines, detection, git and
+the check, memory and usage, a turn with an agent, conversations, roles and plans, the Race, the Crew,
+the window's shell and commands, the interface, and the window self-test.
 
 ## Risks and open points
 

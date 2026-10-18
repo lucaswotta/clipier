@@ -1,6 +1,6 @@
 # Leme Pier: arquitetura
 
-Status: proposta para a 0.0.1, a ser aprovada antes de qualquer código. [English](ARCHITECTURE.md)
+Status: descreve o que a 0.0.1 é. Onde o código e este arquivo discordam, o código está certo e este arquivo tem um erro. [English](ARCHITECTURE.md)
 
 ## O que é
 
@@ -51,58 +51,45 @@ A interface é náutica; o código usa o termo simples e a interface faz o mapea
 leme-pier/
   Cargo.toml                 workspace
   crates/
-    core/                    tudo o que não é janela (biblioteca, totalmente testável)
+    core/                    tudo o que não é janela (biblioteca, testável sem uma)
       src/
-        platform/            o único lugar que distingue Linux de Windows
-        agents/              um adaptador por CLI + detecção
-        runner.rs            inicia um processo, vigia, para
-        usage.rs             o que cada agente fez (registro próprio do Leme)
+        platform/            o único lugar que distingue Linux de Windows (+ os argumentos do bubblewrap)
+        agents/              um arquivo por CLI (comando, saída, detecção) + um turno com um agente
+        runner/              inicia um processo, vigia, para; classifica por que falhou
         session/             conversas e o briefing
-        memory.rs            notas do projeto
-        git.rs               worktrees, commits, merges, diffs, escopo
-        check.rs             achar e rodar a verificação de um projeto
-        roles.rs             arquivos de papéis: de fábrica, do usuário, do projeto
-        plan.rs              o formato do plano e a validação
-        race.rs              a Regata
-        crew.rs              a Tripulação
-        store.rs             onde as coisas ficam no disco
+        crew/                o plano executado; piece.rs é o trabalho de uma parte
+        race.rs  plan.rs  roles.rs  config.rs
+        git.rs  check.rs  scope.rs  memory.rs  usage.rs  store.rs  id.rs
   app/
-    src-tauri/               casca Tauri: só comandos, sem lógica
-    web/                     front-end: módulos JS puros, sem framework
-  docs/                      ARCHITECTURE, SECURITY, CONTRIBUTING, ROADMAP
-  scripts/verify.sh          fmt, clippy -D warnings, testes, build do front-end
+    src-tauri/               casca Tauri: só comandos, sem lógica; o self-test da janela
+    src/                     interface: módulos JS puros, um catálogo por idioma, uma folha de estilo
+    index.html  package.json  vite.config.js  scripts/check-locales.mjs
+  docs/                      ROADMAP e notas
+  scripts/verify.sh          fmt, clippy -D warnings, testes (e um lint de Windows quando o target está instalado)
 ```
 
 O `core` não depende do Tauri. A casca transforma cada função pública do `core` em um comando e nada mais; se a casca ganhar lógica, a lógica vai para o `core`.
 
-### Orçamento de tamanho (Rust, sem testes)
+### Tamanho (Rust, sem testes nem comentários)
 
-| Módulo | Linhas |
+| Parte | Linhas |
 |---|---|
-| `agents` (4 adaptadores, leitura da saída, detecção) | 1.300 |
-| `runner`, `platform` | 450 |
-| `session`, `memory`, `usage` | 700 |
-| `git`, `check` | 650 |
-| `roles`, `plan` | 400 |
-| `race`, `crew` | 700 |
-| `store` e cola | 200 |
-| `app/src-tauri` | 500 |
-| **Total** | **cerca de 4.900** |
+| `agents` (quatro CLIs, saída, comandos, detecção, um turno) | 900 |
+| `crew` | 870 |
+| `race`, `plan`, `roles`, `config` | 820 |
+| `session`, `memory`, `usage`, `store`, `id` | 730 |
+| `git`, `check`, `scope` | 510 |
+| `runner`, `platform` | 480 |
+| `app/src-tauri` (comandos, casca, self-test) | 780 |
+| **Total** | **cerca de 5.100** |
 
-Para comparar, o protótipo tem 13.600 linhas. Ele fica como arquivo privado.
+A interface tem cerca de 2.500 linhas de JavaScript, catálogos e CSS. Para comparar, o protótipo tinha 13.600 linhas de Rust. Ele fica como arquivo privado.
 
 ## Módulos do núcleo
 
 ### `agents`
 
-```text
-trait Agent {
-    fn id(&self) -> &'static str;
-    fn detect(&self) -> Detected;                       // instalado, versão, login, modelos
-    fn command(&self, request: &Request) -> Spawn;      // programa, args, env, cwd
-    fn parse(&self, line: &str, into: &mut Transcript); // uma linha da saída do CLI
-}
-```
+Cada CLI é um arquivo com as mesmas três coisas, escolhido por um enum `Agent`: como montar a linha de comando a partir de um `Request`, como ler uma linha da saída num `Transcript` e como perguntar a ele o que é (`detect`).
 
 A detecção pergunta ao próprio CLI, sem chamar modelo, e foi conferida à mão contra os quatro CLIs na máquina do autor:
 
@@ -319,26 +306,9 @@ Os testes existem para pegar o que machucaria um usuário. Não medem esforço, 
 | `bench`, `headless run`, `gc`, a CLI `voyages` | Removidos; uma CLI pode vir depois sobre o `core` |
 | Cadeias de revisão entre famílias de modelos | Mantidas como o papel `reviewer`, escolhido pelo usuário |
 
-## Plano de commits
+## Como o histórico se lê
 
-Cada commit compila e passa no `scripts/verify.sh` sozinho.
-
-1. Workspace, licença, CI, `verify.sh`, README mínimo.
-2. `platform` e `runner`.
-3. `agents`: trait, `Transcript`, os quatro adaptadores e a detecção, com saídas gravadas.
-4. `git` e `check`.
-5. `memory` e `usage`.
-6. `session`: conversas e o briefing.
-7. `roles` e `plan`.
-8. `race`.
-9. `crew`.
-10. A casca Tauri e seus comandos, com o teste IPC.
-11. Base do front-end: layout, tema, i18n (três catálogos), a lista de agentes.
-12. Tela de Chat.
-13. Set course: formulário e Regata.
-14. Set course: Tripulação.
-15. Tela de Agentes e seletores de papéis.
-16. Self-test da janela, empacotamento (`.deb`, AppImage), docs, `0.0.1`.
+Cada commit compila e passa no `scripts/verify.sh` sozinho, no Linux e no Windows: o workspace e o CI, a camada de plataforma e o executor, o que cada CLI imprime, as linhas de comando, a detecção, o git e a verificação, memória e uso, um turno com um agente, conversas, papéis e planos, a Regata, a Tripulação, a casca e os comandos da janela, a interface e o self-test da janela.
 
 ## Riscos e pontos em aberto
 
