@@ -8,3 +8,7 @@ repository.workspace = true
 
 [lints]
 workspace = true
+
+[target.'cfg(unix)'.dependencies]
+# killpg: a cancelled or stalled agent is ended together with everything it started.
+libc = "0.2"
