@@ -302,6 +302,8 @@ function paintTopbarBare() {
 export async function drawChat(topbar, content) {
   hosts = { topbar, content };
   await Promise.all([loadFleet(), refreshChats()]);
+  // The user may have gone to another screen while the agents were being asked.
+  if (content.dataset.view !== "chat") return;
   paint();
   if (state.id) {
     if (!timer) timer = setInterval(poll, POLL_MS);

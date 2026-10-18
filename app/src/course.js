@@ -385,6 +385,8 @@ function paint() {
 export async function drawCourse(topbar, content) {
   hosts = { topbar, content };
   await loadFleet();
+  // The user may have gone to another screen while the agents were being asked.
+  if (content.dataset.view !== "new") return;
   if (!form.boats.length && fleet.list.length) form.boats = [defaultBoat()];
   form.mode = stored(MODE_KEY) === "crew" ? "crew" : "race";
   if (!form.repository) form.repository = stored(REPOSITORY_KEY);

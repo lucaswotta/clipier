@@ -1,6 +1,4 @@
 //! What the interface can ask for. Each function calls the core and returns what it said.
-// Tauri hands a command its arguments by value, after deserializing them from the interface.
-#![allow(clippy::needless_pass_by_value)]
 
 pub mod chat;
 pub mod crew;

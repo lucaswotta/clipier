@@ -1,10 +1,18 @@
 //! The Leme Pier window. Every command is a thin wrapper over `leme-core`; if one grows logic, the
 //! logic belongs in the core.
+// Tauri hands a command its arguments by value, after deserializing them from the interface.
+#![allow(clippy::needless_pass_by_value)]
 
 mod commands;
+mod selftest;
 
 fn main() {
     tauri::Builder::default()
+        .on_page_load(|webview, payload| {
+            if selftest::requested().is_some() && matches!(payload.event(), tauri::webview::PageLoadEvent::Finished) {
+                selftest::start(webview);
+            }
+        })
         .manage(commands::Agents::default())
         .manage(commands::Chats::default())
         .manage(commands::Races::default())
@@ -31,6 +39,7 @@ fn main() {
             commands::crew::crew_view,
             commands::crew::crew_command,
             commands::crew::crew_diff,
+            selftest::selftest_report,
             commands::roles::roles_list,
             commands::roles::role_save,
             commands::roles::project_settings,
