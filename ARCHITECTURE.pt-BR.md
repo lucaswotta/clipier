@@ -83,7 +83,7 @@ O `core` não depende do Tauri. A casca transforma cada função pública do `co
 | `app/src-tauri` (comandos, casca, self-test) | 780 |
 | **Total** | **cerca de 5.100** |
 
-A interface tem cerca de 2.500 linhas de JavaScript, catálogos e CSS. Para comparar, o protótipo tinha 13.600 linhas de Rust. Ele fica como arquivo privado.
+A interface tem cerca de 2.500 linhas de JavaScript, catálogos e CSS. Para comparar, o protótipo tinha 13.600 linhas de Rust.
 
 ## Módulos do núcleo
 

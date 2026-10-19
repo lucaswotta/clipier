@@ -98,7 +98,7 @@ nothing more; if the shell grows logic, the logic moves to `core`.
 | **Total** | **about 5,100** |
 
 The interface is about 2,500 lines of JavaScript, catalogs and CSS. For comparison, the prototype had
-13,600 lines of Rust. It stays as a private archive.
+13,600 lines of Rust.
 
 ## Core modules
 
