@@ -4,6 +4,8 @@
 
 <p align="center"><strong>Todos os agentes, um só cais.</strong></p>
 
+<p align="center">Read in English: <a href="README.md"><strong>README.md</strong></a></p>
+
 <p align="center">
   <a href="#o-que-ele-faz"><strong>O que ele faz</strong></a> &middot;
   <a href="#instalação"><strong>Instalação</strong></a> &middot;

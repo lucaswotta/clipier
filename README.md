@@ -4,6 +4,8 @@
 
 <p align="center"><strong>Every agent, one dock.</strong></p>
 
+<p align="center">Leia em português: <a href="README.pt-BR.md"><strong>README.pt-BR.md</strong></a></p>
+
 <p align="center">
   <a href="#what-it-does"><strong>What it does</strong></a> &middot;
   <a href="#install"><strong>Install</strong></a> &middot;
